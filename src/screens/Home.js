@@ -6,15 +6,6 @@ const Home = ({navigation}) => {
   return (
     <Container>
       <Text>HomeScreen</Text>
-      <Button
-        title="장바구니"
-        onPress={() =>
-          navigation.navigate('Basket', {
-            screen: 'Basket',
-            params: {Home},
-          })
-        }
-      />
     </Container>
   );
 };

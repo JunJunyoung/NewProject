@@ -1,5 +1,6 @@
 // import 'react-native-gesture-handler';
 import React from 'react';
+import {TouchableOpacity, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -7,6 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './src/screens/Home';
 import Profile from './src/screens/Profile';
 import Want from './src/screens/Want';
+import Basket from './src/components/Basket';
 
 const MaterialTab = createMaterialBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -18,11 +20,34 @@ const HomeStackNavigator = () => (
     <HomeStack.Screen
       name="Home"
       component={Home}
-      options={{
+      options={({navigation}) => ({
+        title: 'YLBA',
         headerTitleStyle: {
-          fontSize: 18,
+          fontSize: 24,
+          fontWeight: 'bold',
           textAlign: 'center',
         },
+        headerTitleAlign: 'center',
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Basket')}
+            style={{fontSize: 25, marginRight: 10}}>
+            <Text>장바구니</Text>
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <HomeStack.Screen
+      name="Basket"
+      component={Basket}
+      options={{
+        title: '장바구니',
+        headerTitleStyle: {
+          fontSize: 20,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        },
+        headerTitleAlign: 'center',
       }}
     />
   </HomeStack.Navigator>
@@ -31,13 +56,34 @@ const HomeStackNavigator = () => (
 const WantStackNavigator = () => (
   <WantStack.Navigator>
     <WantStack.Screen
-      name="Want"
+      name="찜"
       component={Want}
-      options={{
+      options={({navigation}) => ({
         headerTitleStyle: {
-          fontSize: 18,
+          fontSize: 20,
+          fontWeight: 'bold',
+        },
+        headerTitleAlign: 'center',
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Basket')}
+            style={{fontSize: 25, marginRight: 10}}>
+            <Text>장바구니</Text>
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <WantStack.Screen
+      name="Basket"
+      component={Basket}
+      options={{
+        title: '장바구니',
+        headerTitleStyle: {
+          fontSize: 20,
+          fontWeight: 'bold',
           textAlign: 'center',
         },
+        headerTitleAlign: 'center',
       }}
     />
   </WantStack.Navigator>
@@ -46,13 +92,35 @@ const WantStackNavigator = () => (
 const ProfileStackNavigator = () => (
   <ProfileStack.Navigator>
     <ProfileStack.Screen
-      name="Profile"
+      name="마이페이지"
       component={Profile}
-      options={{
+      options={({navigation}) => ({
         headerTitleStyle: {
-          fontSize: 18,
+          fontSize: 20,
+          fontWeight: 'bold',
           textAlign: 'center',
         },
+        headerTitleAlign: 'center',
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Basket')}
+            style={{fontSize: 25, marginRight: 10}}>
+            <Text>장바구니</Text>
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <ProfileStack.Screen
+      name="Basket"
+      component={Basket}
+      options={{
+        title: '장바구니',
+        headerTitleStyle: {
+          fontSize: 20,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        },
+        headerTitleAlign: 'center',
       }}
     />
   </ProfileStack.Navigator>
@@ -62,34 +130,34 @@ const App = () => {
   return (
     <NavigationContainer>
       <MaterialTab.Navigator
-        initialRouteName="Home"
+        initialRouteName="HomeTab"
         screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
+          tabBarIcon: ({focused, color}) => {
             let iconName;
             switch (route.name) {
-              case 'Home':
+              case 'HomeTab':
                 iconName = 'home';
                 break;
-              case 'Want':
+              case 'WantTab':
                 iconName = 'heart';
                 break;
-              case 'Profile':
+              case 'ProfileTab':
                 iconName = 'account';
                 break;
-              default:
-                iconName = 'star-outline';
             }
-            return <Icon size={size} name={iconName} color={color} />;
+            return <Icon size={30} name={iconName} color={color} />;
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#DC143C',
-          inactiveTintColor: '#C7CDD3',
-          showLabel: false,
+          activeTintColor: '#FF6666',
+          inactiveTintColor: 'gray',
         }}>
-        <MaterialTab.Screen name="Want" component={WantStackNavigator} />
-        <MaterialTab.Screen name="Home" component={HomeStackNavigator} />
-        <MaterialTab.Screen name="Profile" component={ProfileStackNavigator} />
+        <MaterialTab.Screen name="WantTab" component={WantStackNavigator} />
+        <MaterialTab.Screen name="HomeTab" component={HomeStackNavigator} />
+        <MaterialTab.Screen
+          name="ProfileTab"
+          component={ProfileStackNavigator}
+        />
       </MaterialTab.Navigator>
     </NavigationContainer>
   );

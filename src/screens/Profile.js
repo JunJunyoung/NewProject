@@ -6,7 +6,6 @@ const Profile = ({navigation}) => {
   return (
     <Container>
       <Text>ProfileScreen</Text>
-      <Button title="장바구니" onPress={() => navigation.navigate('Basket')} />
     </Container>
   );
 };

@@ -6,7 +6,6 @@ const Want = ({navigation}) => {
   return (
     <Container>
       <Text>WantScreen</Text>
-      <Button title="장바구니" onPress={() => navigation.navigate('Basket')} />
     </Container>
   );
 };
