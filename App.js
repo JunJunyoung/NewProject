@@ -11,23 +11,55 @@ import Want from './src/screens/Want';
 import Basket from './src/components/Basket';
 
 const Tab = createBottomTabNavigator();
-const HomeStack = createStackNavigator();
-const WantStack = createStackNavigator();
-const ProfileStack = createStackNavigator();
 
-const HomeStackNavigator = () => (
-  <HomeStack.Navigator>
-    <HomeStack.Screen
-      name="Home"
+const HomeTab = ({navigation}) => (
+  <Tab.Navigator>
+    <Tab.Screen
+      name="찜"
+      component={Want}
+      options={{
+        tabBarShowLabel: false,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontSize: 20,
+          fontWeight: 'bold',
+        },
+        tabBarIcon: ({focused}) =>
+          focused ? (
+            <Icon size={30} name="heart" color="#FF6666" />
+          ) : (
+            <Icon size={30} name="heart" color="gray" />
+          ),
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Basket')}
+            style={{fontSize: 25, marginRight: 10}}>
+            <Text>장바구니</Text>
+          </TouchableOpacity>
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="YLBA"
       component={Home}
-      options={({navigation}) => ({
-        title: 'YLBA',
+      options={{
+        tabBarShowLabel: false,
+        headerTitleAlign: 'center',
         headerTitleStyle: {
           fontSize: 24,
           fontWeight: 'bold',
-          textAlign: 'center',
         },
-        headerTitleAlign: 'center',
+        tabBarIcon: ({focused}) =>
+          focused ? (
+            <Icon
+              size={30}
+              name="home"
+              color="#FF6666"
+              backgroundColor="white"
+            />
+          ) : (
+            <Icon size={30} name="home" color="gray" />
+          ),
         headerRight: () => (
           <TouchableOpacity
             onPress={() => navigation.navigate('Basket')}
@@ -35,74 +67,24 @@ const HomeStackNavigator = () => (
             <Text>장바구니</Text>
           </TouchableOpacity>
         ),
-      })}
-    />
-    <HomeStack.Screen
-      name="Basket"
-      component={Basket}
-      options={{
-        tabBarStyle: {display: 'none'},
-        title: '장바구니',
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: 'bold',
-          textAlign: 'center',
-        },
-        headerTitleAlign: 'center',
       }}
     />
-  </HomeStack.Navigator>
-);
-
-const WantStackNavigator = () => (
-  <WantStack.Navigator>
-    <WantStack.Screen
-      name="찜"
-      component={Want}
-      options={({navigation}) => ({
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: 'bold',
-        },
-        headerTitleAlign: 'center',
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Basket')}
-            style={{fontSize: 25, marginRight: 10}}>
-            <Text>장바구니</Text>
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <WantStack.Screen
-      name="Basket"
-      component={Basket}
-      options={{
-        tabBarStyle: {display: 'none'},
-        title: '장바구니',
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: 'bold',
-          textAlign: 'center',
-        },
-        headerTitleAlign: 'center',
-      }}
-    />
-  </WantStack.Navigator>
-);
-
-const ProfileStackNavigator = () => (
-  <ProfileStack.Navigator>
-    <ProfileStack.Screen
+    <Tab.Screen
       name="마이페이지"
       component={Profile}
-      options={({navigation}) => ({
+      options={{
+        tabBarShowLabel: false,
+        headerTitleAlign: 'center',
         headerTitleStyle: {
           fontSize: 20,
           fontWeight: 'bold',
-          textAlign: 'center',
         },
-        headerTitleAlign: 'center',
+        tabBarIcon: ({focused}) =>
+          focused ? (
+            <Icon size={30} name="account" color="#FF6666" />
+          ) : (
+            <Icon size={30} name="account" color="gray" />
+          ),
         headerRight: () => (
           <TouchableOpacity
             onPress={() => navigation.navigate('Basket')}
@@ -110,79 +92,45 @@ const ProfileStackNavigator = () => (
             <Text>장바구니</Text>
           </TouchableOpacity>
         ),
-      })}
-    />
-    <ProfileStack.Screen
-      name="Basket"
-      component={Basket}
-      options={{
-        tabBarStyle: {display: 'none'},
-        title: '장바구니',
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: 'bold',
-          textAlign: 'center',
-        },
-        headerTitleAlign: 'center',
       }}
     />
-  </ProfileStack.Navigator>
+  </Tab.Navigator>
 );
+
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="HomeTab"
+      <Stack.Navigator
+        initialRouteName="Home"
         screenOptions={{
           tabBarActiveTintColor: '#FF6666',
           tabBarShowLabel: false,
         }}>
-        <Tab.Screen
-          name="WantTab"
-          component={WantStackNavigator}
+        <Stack.Screen
+          name="Home"
+          component={HomeTab}
           options={{
             headerShown: false,
-            tabBarIcon: ({focused}) =>
-              focused ? (
-                <Icon size={30} name="heart" color="#FF6666" />
-              ) : (
-                <Icon size={30} name="heart" color="gray" />
-              ),
           }}
         />
-        <Tab.Screen
-          name="HomeTab"
-          component={HomeStackNavigator}
+        <Stack.Screen
+          name="Basket"
+          component={Basket}
           options={{
-            headerShown: false,
-            tabBarIcon: ({focused}) =>
-              focused ? (
-                <Icon
-                  size={30}
-                  name="home"
-                  color="#FF6666"
-                  backgroundColor="white"
-                />
-              ) : (
-                <Icon size={30} name="home" color="gray" />
-              ),
+            tabBarStyle: {display: 'none'},
+            title: '장바구니',
+            headerShown: true,
+            headerTitleStyle: {
+              fontSize: 20,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            },
+            headerTitleAlign: 'center',
           }}
         />
-        <Tab.Screen
-          name="ProfileTab"
-          component={ProfileStackNavigator}
-          options={{
-            headerShown: false,
-            tabBarIcon: ({focused}) =>
-              focused ? (
-                <Icon size={30} name="account" color="#FF6666" />
-              ) : (
-                <Icon size={30} name="account" color="gray" />
-              ),
-          }}
-        />
-      </Tab.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
