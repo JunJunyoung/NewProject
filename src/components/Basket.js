@@ -6,6 +6,7 @@ const Basket = () => {
   return (
     <Container>
       <Text>장바구니</Text>
+      <Button title="구매하기" color="tomato" size={40} />
     </Container>
   );
 };

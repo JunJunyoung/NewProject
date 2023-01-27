@@ -1,16 +1,16 @@
-// import 'react-native-gesture-handler';
+import 'react-native-gesture-handler';
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './src/screens/Home';
 import Profile from './src/screens/Profile';
 import Want from './src/screens/Want';
 import Basket from './src/components/Basket';
 
-const MaterialTab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const WantStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -41,6 +41,7 @@ const HomeStackNavigator = () => (
       name="Basket"
       component={Basket}
       options={{
+        tabBarStyle: {display: 'none'},
         title: '장바구니',
         headerTitleStyle: {
           fontSize: 20,
@@ -77,6 +78,7 @@ const WantStackNavigator = () => (
       name="Basket"
       component={Basket}
       options={{
+        tabBarStyle: {display: 'none'},
         title: '장바구니',
         headerTitleStyle: {
           fontSize: 20,
@@ -114,6 +116,7 @@ const ProfileStackNavigator = () => (
       name="Basket"
       component={Basket}
       options={{
+        tabBarStyle: {display: 'none'},
         title: '장바구니',
         headerTitleStyle: {
           fontSize: 20,
@@ -129,36 +132,57 @@ const ProfileStackNavigator = () => (
 const App = () => {
   return (
     <NavigationContainer>
-      <MaterialTab.Navigator
+      <Tab.Navigator
         initialRouteName="HomeTab"
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color}) => {
-            let iconName;
-            switch (route.name) {
-              case 'HomeTab':
-                iconName = 'home';
-                break;
-              case 'WantTab':
-                iconName = 'heart';
-                break;
-              case 'ProfileTab':
-                iconName = 'account';
-                break;
-            }
-            return <Icon size={30} name={iconName} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: '#FF6666',
-          inactiveTintColor: 'gray',
+        screenOptions={{
+          tabBarActiveTintColor: '#FF6666',
+          tabBarShowLabel: false,
         }}>
-        <MaterialTab.Screen name="WantTab" component={WantStackNavigator} />
-        <MaterialTab.Screen name="HomeTab" component={HomeStackNavigator} />
-        <MaterialTab.Screen
+        <Tab.Screen
+          name="WantTab"
+          component={WantStackNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) =>
+              focused ? (
+                <Icon size={30} name="heart" color="#FF6666" />
+              ) : (
+                <Icon size={30} name="heart" color="gray" />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="HomeTab"
+          component={HomeStackNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) =>
+              focused ? (
+                <Icon
+                  size={30}
+                  name="home"
+                  color="#FF6666"
+                  backgroundColor="white"
+                />
+              ) : (
+                <Icon size={30} name="home" color="gray" />
+              ),
+          }}
+        />
+        <Tab.Screen
           name="ProfileTab"
           component={ProfileStackNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) =>
+              focused ? (
+                <Icon size={30} name="account" color="#FF6666" />
+              ) : (
+                <Icon size={30} name="account" color="gray" />
+              ),
+          }}
         />
-      </MaterialTab.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };
