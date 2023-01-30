@@ -13,7 +13,7 @@ import Basket from './src/components/Basket';
 const Tab = createBottomTabNavigator();
 
 const HomeTab = ({navigation}) => (
-  <Tab.Navigator>
+  <Tab.Navigator initialRouteName="YLBA">
     <Tab.Screen
       name="찜"
       component={Want}
@@ -103,7 +103,6 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
         screenOptions={{
           tabBarActiveTintColor: '#FF6666',
           tabBarShowLabel: false,

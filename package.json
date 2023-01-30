@@ -18,6 +18,8 @@
     "@reduxjs/toolkit": "^1.9.1",
     "react": "18.2.0",
     "react-native": "0.71.1",
+    "react-native-bouncy-checkbox": "^3.0.6",
+    "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-paper": "^5.1.4",
     "react-native-reanimated": "^2.14.4",
