@@ -9,6 +9,9 @@ import Home from './src/screens/Home';
 import Profile from './src/screens/Profile';
 import Want from './src/screens/Want';
 import Basket from './src/components/Basket';
+import DetailPage from './src/components/DetailPage';
+import {store} from './src/redux/store';
+import {Provider} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -101,36 +104,53 @@ const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: '#FF6666',
-          tabBarShowLabel: false,
-        }}>
-        <Stack.Screen
-          name="Home"
-          component={HomeTab}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Basket"
-          component={Basket}
-          options={{
-            tabBarStyle: {display: 'none'},
-            title: '장바구니',
-            headerShown: true,
-            headerTitleStyle: {
-              fontSize: 20,
-              fontWeight: 'bold',
-              textAlign: 'center',
-            },
-            headerTitleAlign: 'center',
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: '#FF6666',
+            tabBarShowLabel: false,
+          }}>
+          <Stack.Screen
+            name="Home"
+            component={HomeTab}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Basket"
+            component={Basket}
+            options={{
+              tabBarStyle: {display: 'none'},
+              title: '장바구니',
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              },
+              headerTitleAlign: 'center',
+            }}
+          />
+          <Stack.Screen
+            name="DetailPage"
+            component={DetailPage}
+            options={{
+              tabBarStyle: {display: 'none'},
+              title: '상품상세정보',
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              },
+              headerTitleAlign: 'center',
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
