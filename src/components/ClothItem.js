@@ -4,21 +4,19 @@ import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Octicons';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import useClothsRelatedActions from '~/hooks/useClothsRelatedActions';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 
-function ClothItem({
-  contentId,
-  category,
-  name,
-  explain,
-  brand,
-  price,
-  isChecked,
-  onPress,
-  thumbnailList,
-  detailList,
-}) {
+function ClothItem({contentId, price}) {
+  const clothList = useSelector(state => state.clothList.clothList);
+  const clickedClothList = clothList.find(item => {
+    item.contentId === contentId;
+  });
+  const {brand, name, thumbnailList, isChecked} = clickedClothList;
+
+  const {toggle} = useClothsRelatedActions();
   const navigation = useNavigation();
   return (
     <Container>
@@ -27,22 +25,19 @@ function ClothItem({
           navigation.navigate('DetailPage', {
             contentId,
             price,
-            category,
-            brand,
-            name,
-            explain,
-            thumbnailList,
-            detailList,
-            isChecked,
           })
         }>
         <ClothImage height={180} width={'100%'} thumbnailList={thumbnailList} />
         {isChecked === false ? (
-          <HeartPressable onPress={onPress} activeOpacity={0.75}>
+          <HeartPressable
+            onPress={() => toggle(contentId)}
+            activeOpacity={0.75}>
             <Icon name="heart" size={27} color="white" />
           </HeartPressable>
         ) : (
-          <HeartPressable onPress={onPress} activeOpacity={0.75}>
+          <HeartPressable
+            onPress={() => toggle(contentId)}
+            activeOpacity={0.75}>
             <Icon name="heart-fill" size={27} color="#f66" />
           </HeartPressable>
         )}

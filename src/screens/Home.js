@@ -2,14 +2,12 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import styled from 'styled-components/native';
 import ClothItem from '../components/ClothItem';
-import {useDispatch, useSelector} from 'react-redux';
-import {toggle} from '../redux/ClothList';
+import {useSelector} from 'react-redux';
 import ScrollViewCarousel from '../components/ScrollViewCarousel';
 import eventsImage from '../static/events.json';
 
 const Home = () => {
   const clothList = useSelector(state => state.clothList.clothList);
-  const dispatch = useDispatch();
 
   return (
     <Container showsVerticalScrollIndicator={false} stickyHeaderIndices={[2]}>
@@ -30,33 +28,13 @@ const Home = () => {
       <ClothContainer>
         <ClothView>
           {clothList.map(item => {
-            const {
-              contentId,
-              name,
-              explain,
-              brand,
-              price,
-              thumbnailList,
-              detailList,
-              isChecked,
-              category,
-            } = item;
+            const {contentId, price} = item;
             const stringPrice = price
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             return (
               <ClothItemWrapper key={contentId}>
-                <ClothItem
-                  name={name}
-                  category={category}
-                  explain={explain}
-                  brand={brand}
-                  price={stringPrice}
-                  thumbnailList={thumbnailList}
-                  detailList={detailList}
-                  isChecked={isChecked}
-                  onPress={() => dispatch(toggle(contentId))}
-                />
+                <ClothItem id={contentId} price={stringPrice} />
               </ClothItemWrapper>
             );
           })}

@@ -3,21 +3,18 @@ import {View, Image} from 'react-native';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Octicons';
 import FastImage from 'react-native-fast-image';
-import {useDispatch} from 'react-redux';
-import {toggle} from '../redux/ClothList';
+import {useSelector} from 'react-redux';
+import useClothsRelatedActions from '~/hooks/useClothsRelatedActions';
 
 const DetailPage = ({route}) => {
-  const {
-    price,
-    category,
-    brand,
-    name,
-    explain,
-    thumbnailList,
-    detailList,
-    isChecked,
-  } = route.params;
-  const dispatch = useDispatch();
+  const {contentId, price} = route.params;
+  const clothList = useSelector(state => state.clothList.clothList);
+  const clickedClothList = clothList.find(item => {
+    item.contentId === contentId;
+  });
+  const {brand, name, explain, thumbnailList, detailList, color, size} =
+    clickedClothList;
+  const {toggle} = useClothsRelatedActions();
   return (
     <Container>
       <ThumbnailView horizontal={true} showsHorizontalScrollIndicator={true}>
@@ -74,13 +71,13 @@ const DetailPage = ({route}) => {
         <View style={{height: 50, width: 50}}>
           {isChecked === false ? (
             <WantButton
-              onPress={() => dispatch(toggle(contentId))}
+              onPress={() => toggle(contentId)}
               activeOpacity={0.9}>
               <Icon name="heart" size={40} color="black" />
             </WantButton>
           ) : (
             <WantButton
-              onPress={() => dispatch(toggle(contentId))}
+              onPress={() => toggle(contentId)}
               activeOpacity={0.9}>
               <Icon name="heart-fill" size={40} color="#f66" />
             </WantButton>
