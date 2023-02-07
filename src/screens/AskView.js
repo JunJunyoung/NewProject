@@ -6,9 +6,14 @@ import {View, Dimensions, Text} from 'react-native';
 import {exp} from 'react-native-reanimated';
 
 function AskView() {
-  <View style={{flex: 1}}>
-    <Text>문의</Text>
-  </View>;
+  useEffect(() => {
+    console.log('AskView>>>');
+  }, []);
+  return (
+    <View style={{flex: 1}}>
+      <Text>문의</Text>
+    </View>
+  );
 }
 
 export default AskView;

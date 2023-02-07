@@ -21,6 +21,15 @@ export const clothListSlice = createSlice({
         }
       });
     },
+    toggleAll: state => {
+      state.clothList = state.clothList.map(item => {
+        if (item.isChecked === true) {
+          return {...item, isChecked: !item.isChecked};
+        } else {
+          return item;
+        }
+      });
+    },
   },
 });
 
@@ -32,7 +41,7 @@ export const clothListSlice = createSlice({
 //   (isChecked) => {state.clothList.clothList.map(item => {item.isChecked === true ? item : null})}
 // );
 
-export const {toggle} = clothListSlice.actions;
+export const {toggle, toggleAll} = clothListSlice.actions;
 export default clothListSlice.reducer;
 
 // add: (
@@ -43,8 +52,6 @@ export default clothListSlice.reducer;
 //     content: string;
 //   }>,
 // ) => {
-//   console.log('state>>>', state);
-//   console.log('action>>>', action);
 //   state.push({
 //     contentId: nextId,
 //     ...action.payload,

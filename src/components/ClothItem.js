@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Dimensions, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Octicons';
@@ -7,16 +7,25 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
-const SLIDER_WIDTH = Dimensions.get('window').width;
-
-function ClothItem({contentId, price, containerHeight, height}) {
+function ClothItem({
+  contentId,
+  price,
+  containerHeight,
+  containerWidth,
+  height,
+  heartSize,
+  iconPaddingTop,
+  iconPaddingLeft,
+}) {
   const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothList = clothList.find(item => item.contentId === contentId);
   const {brand, name, thumbnailList, isChecked} = clickedClothList;
   const {toggle} = useClothsRelatedActions();
   const navigation = useNavigation();
   return (
-    <Container containerHeight={containerHeight}>
+    <Container
+      containerHeight={containerHeight}
+      containerWidth={containerWidth}>
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('DetailScreen', {
@@ -32,15 +41,19 @@ function ClothItem({contentId, price, containerHeight, height}) {
         />
         {isChecked === false ? (
           <HeartPressable
+            iconPaddingTop={iconPaddingTop}
+            iconPaddingLeft={iconPaddingLeft}
             onPress={() => toggle(contentId)}
             activeOpacity={0.75}>
-            <Icon name="heart" size={27} color="white" />
+            <Icon name="heart" size={heartSize} color="white" />
           </HeartPressable>
         ) : (
           <HeartPressable
+            iconPaddingTop={iconPaddingTop}
+            iconPaddingLeft={iconPaddingLeft}
             onPress={() => toggle(contentId)}
             activeOpacity={0.75}>
-            <Icon name="heart-fill" size={27} color="#f66" />
+            <Icon name="heart-fill" size={heartSize} color="#f66" />
           </HeartPressable>
         )}
       </TouchableOpacity>
@@ -73,14 +86,14 @@ const ClothImage = ({height, width, thumbnailList}) => {
 
 const Container = styled.View`
   height: ${props => props.containerHeight}px;
-  width: ${SLIDER_WIDTH / 2}px;
+  width: ${props => props.containerWidth}px;
   padding-horizontal: 10px;
 `;
 
 const HeartPressable = styled.TouchableOpacity`
   position: absolute;
-  padding-top: 8px;
-  padding-left: 142px;
+  padding-top: ${props => props.iconPaddingTop}px;
+  padding-left: ${props => props.iconPaddingLeft}px;
 `;
 
 const PriceText = styled.Text`

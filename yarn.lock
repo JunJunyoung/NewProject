@@ -6154,6 +6154,11 @@ react-native-snap-carousel@^3.9.1:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
 
+react-native-tab-view-viewpager-adapter@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view-viewpager-adapter/-/react-native-tab-view-viewpager-adapter-1.1.0.tgz#d6e085ed1c91a13e714d87395d428f8afc2b3377"
+  integrity sha512-KLKw+Ay41xAl5F2eRscJd7DHN8JLx06E2lTQJrYAxtBcNKDKfrcYC3wmq7t72DAOBe/6niF0h44c/t/D/AoXsA==
+
 react-native-tab-view@^3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.3.4.tgz#856d4527f3bbf05e2649302ec80abe9f2f004666"

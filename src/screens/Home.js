@@ -1,10 +1,12 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import styled from 'styled-components/native';
 import ClothItem from '../components/ClothItem';
 import {useSelector} from 'react-redux';
 import ScrollViewCarousel from '../components/ScrollViewCarousel';
 import eventsImage from '../static/events.json';
+
+const HALF_WINDOW_WIDTH = Dimensions.get('window').width / 2;
 
 const Home = () => {
   const clothList = useSelector(state => state.clothList.clothList);
@@ -39,6 +41,10 @@ const Home = () => {
                   price={stringPrice}
                   containerHeight={250}
                   height={180}
+                  containerWidth={HALF_WINDOW_WIDTH}
+                  heartSize={31}
+                  iconPaddingTop={8}
+                  iconPaddingLeft={142}
                 />
               </ClothItemWrapper>
             );

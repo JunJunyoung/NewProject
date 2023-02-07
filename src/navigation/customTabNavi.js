@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Text, View, Dimensions} from 'react-native';
+import {TouchableOpacity, Text, View, Dimensions, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {TabView, ScrollPager, TabBar} from 'react-native-tab-view';
+import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
 import Icon from 'react-native-vector-icons/Octicons';
 import HomeIcon from 'react-native-vector-icons/MaterialIcons';
 import Home from '../screens/Home';
@@ -103,7 +104,7 @@ const HomeTab = ({navigation}) => (
 );
 
 const renderScene = ({route, contentId, price}) => {
-  switch (route.params) {
+  switch (route.key) {
     case 'first':
       return <ClothInfo contentId={contentId} price={price} />;
     case 'Review':
@@ -124,21 +125,30 @@ function DetailScreen({route}) {
   ]);
   return (
     <View style={{flex: 1}}>
-      <BottomButton
-        isChecked={route.params.isChecked}
-        contentId={route.params.contentId}
-      />
       <DetailScrollView>
         <DetailPage
           contentId={route.params.contentId}
           price={route.params.price}
         />
         <TabView
+          contentId={route.params.contentId}
+          price={route.params.price}
           navigationState={{index, routes}}
           renderScene={renderScene}
           onIndexChange={setIndex}
           initialLayout={initialLayout}
           style={{flex: 1}}
+          renderPager={props =>
+            Platform.OS === 'ios' ? (
+              <ScrollPager {...props} />
+            ) : (
+              <ViewPagerAdapter
+                {...props}
+                transition="curl"
+                showPageIndicator
+              />
+            )
+          }
           renderTabBar={props => (
             <TabBar
               {...props}
@@ -148,7 +158,6 @@ function DetailScreen({route}) {
               }}
               style={{
                 backgroundColor: 'white',
-                fontWeight: 'bold',
                 shadowOffset: {height: 0, width: 0},
                 shadowColor: 'gray',
               }}
@@ -156,6 +165,7 @@ function DetailScreen({route}) {
               inactiveColor={'gray'}
               activeColor={'black'}
               pressColor={'#C0C0C0'}
+              labelStyle={{fontSize: 17, fontWeight: 'bold', paddingBottom: 4}}
             />
           )}
         />
@@ -167,8 +177,43 @@ function DetailScreen({route}) {
           <Text>Hello</Text>
           <Text>Hello</Text>
           <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
         </View>
       </DetailScrollView>
+      <View
+        style={{
+          textAlign: 'center',
+          position: 'absolute',
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+          bottom: 81,
+          height: 40,
+          width: '100%',
+        }}>
+        <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 4}}>
+          1,250명이 이 상품을 구매하는 중이에요 (구현예정)
+        </Text>
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 80,
+          height: 1,
+          width: '100%',
+          backgroundColor: '#E0E0E0',
+        }}
+      />
+      <BottomButton
+        isChecked={route.params.isChecked}
+        contentId={route.params.contentId}
+      />
     </View>
     // <DetailPage contentId={route.params.contentId} price={route.params.price} />
     //   <MiddleTab.Screen

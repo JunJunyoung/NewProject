@@ -5,9 +5,14 @@ import {useSelector} from 'react-redux';
 import {View, Dimensions, Text} from 'react-native';
 
 function Review() {
-  <View style={{flex: 1}}>
-    <Text>리뷰</Text>
-  </View>;
+  useEffect(() => {
+    console.log('AskView>>>');
+  }, []);
+  return (
+    <View style={{flex: 1}}>
+      <Text>리뷰</Text>
+    </View>
+  );
 }
 
 export default Review;

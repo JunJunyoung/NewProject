@@ -36,6 +36,7 @@
     "react-native-screens": "^3.19.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-tab-view": "^3.3.4",
+    "react-native-tab-view-viewpager-adapter": "^1.1.0",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.5",
     "styled-components": "^5.3.6"

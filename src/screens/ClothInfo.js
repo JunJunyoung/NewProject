@@ -1,38 +1,52 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
-import {View, Dimensions} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 
 const WindowWIDTH = Dimensions.get('window').width;
 
 const ClothInfo = ({contentId}) => {
-  const clothList = useSelector(state => state.clothList.clothList);
-  const clickedClothList = clothList.find(item => item.contentId === contentId);
-  const {detailList} = clickedClothList;
+  // const clothList = useSelector(state => state.clothList.clothList);
+  // const clickedClothList = clothList.find(item => item.contentId === contentId);
+  // const {detailList} = clickedClothList;
+  useEffect(() => {
+    console.log("ClothInfo>>>");
+}, []);
   return (
-    <Container>
-      {detailList &&
-        detailList.map(item => {
-          const {detailID, uri} = item;
-          return (
-            <ClothItemWrapper key={detailID}>
-              <View>
-                <FastImage
-                  style={{height: 'auto', width: WindowWIDTH}}
-                  justifyContent="center"
-                  source={{
-                    uri,
-                    headers: {Authorization: 'someAuthToken'},
-                    priority: FastImage.priority.normal,
-                  }}
-                  resizeMode={FastImage.resizeMode.cover}
-                />
-              </View>
-            </ClothItemWrapper>
-          );
-        })}
-    </Container>
+    <View style={{flex: 1, width: WindowWIDTH}}>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+    </View>
+    // <Container>
+    //   {detailList &&
+    //     detailList.map(item => {
+    //       const {detailID, uri} = item;
+    //       return (
+    //         <ClothItemWrapper key={detailID}>
+    //           <View>
+    //             <FastImage
+    //               style={{height: 'auto', width: WindowWIDTH}}
+    //               justifyContent="center"
+    //               source={{
+    //                 uri,
+    //                 headers: {Authorization: 'someAuthToken'},
+    //                 priority: FastImage.priority.normal,
+    //               }}
+    //               resizeMode={FastImage.resizeMode.cover}
+    //             />
+    //           </View>
+    //         </ClothItemWrapper>
+    //       );
+    //     })}
+    // </Container>
   );
 };
 
