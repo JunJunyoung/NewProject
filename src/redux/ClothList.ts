@@ -1,5 +1,12 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {
+  createSlice,
+  PayloadAction,
+  createSelector,
+  Store,
+} from '@reduxjs/toolkit';
+import {create} from 'react-test-renderer';
 import storage from '../static/storage.json';
+import {RootState} from './store';
 
 export const clothListSlice = createSlice({
   name: 'clothList',
@@ -16,6 +23,14 @@ export const clothListSlice = createSlice({
     },
   },
 });
+
+// export const isCheckedSelector = (state: RootState) : boolean =>
+//  state.clothList.clothList.isChecked;
+
+//  const isCheckedItemSelector = createSelector(
+//   isCheckedSelector,
+//   (isChecked) => {state.clothList.clothList.map(item => {item.isChecked === true ? item : null})}
+// );
 
 export const {toggle} = clothListSlice.actions;
 export default clothListSlice.reducer;

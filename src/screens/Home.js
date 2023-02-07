@@ -11,8 +11,8 @@ const Home = () => {
 
   return (
     <Container showsVerticalScrollIndicator={false} stickyHeaderIndices={[2]}>
-      <CarouselBox>
-        <ScrollViewCarousel pages={eventsImage} />
+      <CarouselBox height={210}>
+        <ScrollViewCarousel pages={eventsImage} height={210} />
       </CarouselBox>
       <View
         style={{
@@ -34,7 +34,12 @@ const Home = () => {
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             return (
               <ClothItemWrapper key={contentId}>
-                <ClothItem id={contentId} price={stringPrice} />
+                <ClothItem
+                  contentId={contentId}
+                  price={stringPrice}
+                  containerHeight={250}
+                  height={180}
+                />
               </ClothItemWrapper>
             );
           })}
@@ -50,14 +55,13 @@ const Container = styled.ScrollView`
 `;
 
 const CarouselBox = styled.View`
-  flex: 1;
+  height: ${props => props.height}px;
   margin-bottom: 0px;
   background-color: white;
   overflow: hidden;
 `;
 
 const ClothContainer = styled.View`
-  flex: 1.1;
   margin-top: 8px;
 `;
 const TextView = styled.View`

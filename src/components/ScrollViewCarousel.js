@@ -1,8 +1,9 @@
 import React, {useState, useRef} from 'react';
 import {View, Dimensions, Image} from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import AutoHeightImage from 'react-native-auto-height-image';
 
-const SLIDER_WIDTH = Dimensions.get('window').width + 40;
+const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
 const renderItem = ({item}) => {
@@ -11,15 +12,12 @@ const renderItem = ({item}) => {
       style={{
         alignItems: 'center',
       }}>
-      <Image
-        source={{uri: item.uri}}
-        style={{width: 411, height: 224, resizeMode: 'contain'}}
-      />
+      <AutoHeightImage width={SLIDER_WIDTH} source={{uri: item.uri}} />
     </View>
   );
 };
 
-function ScrollViewCarousel({pages}) {
+function ScrollViewCarousel({pages, height}) {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
   return (
@@ -36,7 +34,7 @@ function ScrollViewCarousel({pages}) {
       <Pagination
         containerStyle={{
           position: 'absolute',
-          paddingVertical: 197,
+          paddingVertical: height * 0.9,
         }}
         dotsLength={pages.length}
         activeDotIndex={index}
@@ -45,7 +43,7 @@ function ScrollViewCarousel({pages}) {
           width: 8,
           height: 8,
           borderRadius: 5,
-          backgroundColor: '#303030',
+          backgroundColor: '#101010',
         }}
         tappableDots={true}
         inactiveDotStyle={{

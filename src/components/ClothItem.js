@@ -1,33 +1,35 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Dimensions, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Octicons';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import useClothsRelatedActions from '~/hooks/useClothsRelatedActions';
+import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 
-function ClothItem({contentId, price}) {
+function ClothItem({contentId, price, containerHeight, height}) {
   const clothList = useSelector(state => state.clothList.clothList);
-  const clickedClothList = clothList.find(item => {
-    item.contentId === contentId;
-  });
+  const clickedClothList = clothList.find(item => item.contentId === contentId);
   const {brand, name, thumbnailList, isChecked} = clickedClothList;
-
   const {toggle} = useClothsRelatedActions();
   const navigation = useNavigation();
   return (
-    <Container>
+    <Container containerHeight={containerHeight}>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('DetailPage', {
+          navigation.navigate('DetailScreen', {
             contentId,
             price,
+            isChecked,
           })
         }>
-        <ClothImage height={180} width={'100%'} thumbnailList={thumbnailList} />
+        <ClothImage
+          height={height}
+          width={'100%'}
+          thumbnailList={thumbnailList}
+        />
         {isChecked === false ? (
           <HeartPressable
             onPress={() => toggle(contentId)}
@@ -70,8 +72,8 @@ const ClothImage = ({height, width, thumbnailList}) => {
 };
 
 const Container = styled.View`
-  height: 250px;
-  width: ${SLIDER_WIDTH / 2};
+  height: ${props => props.containerHeight}px;
+  width: ${SLIDER_WIDTH / 2}px;
   padding-horizontal: 10px;
 `;
 
