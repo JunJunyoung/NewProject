@@ -35,7 +35,9 @@ const Want = () => {
       <TopView>
         <RecommendText>모두보기</RecommendText>
         <DeleteButton onPress={() => deleteIsChecked()}>
-          <DeleteText>전체 삭제</DeleteText>
+          <DeleteText style={{textAlign: 'right', fontWeight: 'bold'}}>
+            전체 삭제
+          </DeleteText>
         </DeleteButton>
       </TopView>
       <ClothContainer>
@@ -95,7 +97,7 @@ const DeleteButton = styled.TouchableOpacity`
   height: 40px;
   width: 80px;
   margin-top: 12px;
-  margin-right: 13px;
+  margin-right: 7px;
 `;
 
 const DeleteText = styled.Text`

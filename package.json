@@ -26,6 +26,7 @@
     "react-native": "0.71.1",
     "react-native-auto-height-image": "^3.2.4",
     "react-native-bouncy-checkbox": "^3.0.6",
+    "react-native-dropdown-picker": "^5.4.4",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-pager-view": "^6.1.2",
@@ -39,6 +40,7 @@
     "react-native-tab-view-viewpager-adapter": "^1.1.0",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.5",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {

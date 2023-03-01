@@ -17,9 +17,20 @@ function ClothItem({
   iconPaddingTop,
   iconPaddingLeft,
 }) {
+  const {addRecentProduct} = useClothsRelatedActions();
   const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothList = clothList.find(item => item.contentId === contentId);
-  const {brand, name, thumbnailList, isChecked} = clickedClothList;
+  const {
+    name,
+    explain,
+    category,
+    brand,
+    color,
+    size,
+    isChecked,
+    thumbnailList,
+    detailList,
+  } = clickedClothList;
   const {toggle} = useClothsRelatedActions();
   const navigation = useNavigation();
   return (
@@ -27,13 +38,26 @@ function ClothItem({
       containerHeight={containerHeight}
       containerWidth={containerWidth}>
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
           navigation.navigate('DetailScreen', {
             contentId,
             price,
             isChecked,
-          })
-        }>
+          });
+          addRecentProduct({
+            contentId,
+            name,
+            explain,
+            category,
+            brand,
+            color,
+            price,
+            size,
+            isChecked,
+            thumbnailList,
+            detailList,
+          });
+        }}>
         <ClothImage
           height={height}
           width={'100%'}

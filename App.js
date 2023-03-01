@@ -1,10 +1,10 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Basket from './src/components/Basket';
-import {HomeTab, DetailScreen} from './src/navigation/customTabNavi';
+import HomeTab from './src/navigation/customTabNavi';
+import DetailScreen from './src/screens/DetailScreen';
 import {store} from './src/redux/store';
 import {Provider} from 'react-redux';
 

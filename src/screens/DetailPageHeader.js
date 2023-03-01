@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, Text} from 'react-native';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Octicons';
 import {useSelector} from 'react-redux';
@@ -7,12 +7,12 @@ import ScrollViewCarousel from '../components/ScrollViewCarousel';
 
 const WindowWIDTH = Dimensions.get('window').width;
 
-const DetailPage = ({contentId, price}) => {
+const DetailPageHeader = ({contentId, price, pointerEvents}) => {
   const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothList = clothList.find(item => item.contentId === contentId);
   const {brand, category, name, explain, thumbnailList} = clickedClothList;
   return (
-    <Container>
+    <Container pointerEvents="box-none">
       <CarouselBox height={400}>
         <ScrollViewCarousel pages={thumbnailList} height={400} />
       </CarouselBox>
@@ -44,38 +44,21 @@ const DetailPage = ({contentId, price}) => {
           marginTop: 10,
         }}
       />
-      <View style={{paddingTop: 5, backgroundColor: 'white'}}>
-        {/* <Tab.Navigator>
-          <Tab.Screen
-            name="ClothInfo"
-            children={() => <ClothInfo contentId={contentId} />}
-            options={{tabBarShowLabel: false}}
-          />
-          <Tab.Screen
-            name="Review"
-            children={() => <Review contentId={contentId} />}
-            options={{tabBarShowLabel: false}}
-          />
-          <Tab.Screen
-            name="AskView"
-            children={() => <AskView contentId={contentId} />}
-            options={{tabBarShowLabel: false}}
-          />
-        </Tab.Navigator> */}
-      </View>
+      <View style={{paddingTop: 5, backgroundColor: 'white'}}></View>
     </Container>
   );
 };
 
 const Container = styled.View`
-  flex: 1;
+  height: 302px;
+  width: 100%;
   background-color: #f7f7f7f7;
 `;
 
 const CarouselBox = styled.View`
   height: ${props => props.height}px;
   padding-vertical: 0.7px;
-  width: ${WindowWIDTH}px;
+  width: 100%;
   margin-bottom: 0px;
   background-color: white;
   overflow: hidden;
@@ -125,4 +108,4 @@ const PriceText = styled.Text`
   color: black;
 `;
 
-export default DetailPage;
+export default DetailPageHeader;

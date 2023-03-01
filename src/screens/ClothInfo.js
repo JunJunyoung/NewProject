@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, ScrollView} from 'react-native';
 
 const WindowWIDTH = Dimensions.get('window').width;
 
@@ -10,11 +10,8 @@ const ClothInfo = ({contentId}) => {
   // const clothList = useSelector(state => state.clothList.clothList);
   // const clickedClothList = clothList.find(item => item.contentId === contentId);
   // const {detailList} = clickedClothList;
-  useEffect(() => {
-    console.log("ClothInfo>>>");
-}, []);
   return (
-    <View style={{flex: 1, width: WindowWIDTH}}>
+    <ScrollView style={{flex: 1, backgroundColor: 'tomato'}}>
       <Text>구현 중입니다</Text>
       <Text>구현 중입니다</Text>
       <Text>구현 중입니다</Text>
@@ -24,7 +21,14 @@ const ClothInfo = ({contentId}) => {
       <Text>구현 중입니다</Text>
       <Text>구현 중입니다</Text>
       <Text>구현 중입니다</Text>
-    </View>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+      <Text>구현 중입니다</Text>
+    </ScrollView>
     // <Container>
     //   {detailList &&
     //     detailList.map(item => {

@@ -5,9 +5,18 @@
     "explain": "양기모 원단으로 포근하게 착용될 맨투맨! 백라인이 귀여운 프린팅으로 캐주얼한 것이 포인트!",
     "category": "맨투맨",
     "brand": "GaenSo",
-    "color": "핑크,크림,그레이",
+    "color": [
+      {"label": "핑크", "value": "핑크"},
+      {"label": "크림", "value": "크림"},
+      {"label": "그레이", "value": "그레이"}
+    ],
     "price": 21500,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 50}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -52,9 +61,18 @@
     "explain": "촘촘한 니트 짜임으로 포근함이 느껴지는 원피스! 롱한 기장으로 체형을 자연스럽게 커버해주며 밑단 양 사이드 슬릿으로 활동적!",
     "category": "원피스",
     "brand": "JARA",
-    "color": "블랙,베이지,그레이",
+    "color": [
+      {"label": "블랙", "value": "블랙"},
+      {"label": "베이지", "value": "베이지"},
+      {"label": "그레이", "value": "그레이"}
+    ],
     "price": 39900,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -95,9 +113,14 @@
     "explain": "라인은 예술! 편안해서 벗기 싫고 입는 순간 너무 편한~ 입고 잠들어도 몰라요!",
     "category": "바지",
     "brand": "JANDA",
-    "color": "블랙",
+    "color": [{"label": "블랙", "value": "블랙"}],
     "price": 23500,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -134,9 +157,17 @@
     "explain": "캐주얼한 스트라이프 패턴과 바스트 라인에 빅포켓 디자인! 데일리 룩으로 활용도가 높은 셔츠!",
     "category": "셔츠",
     "brand": "JAJA",
-    "color": "핑크,블루",
+    "color": [
+      {"label": "핑크", "value": "핑크"},
+      {"label": "블루", "value": "블루"}
+    ],
     "price": 29900,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -177,9 +208,17 @@
     "explain": "트렌디하게 매치할 수 있는 레더 자켓! 은은한 광택감의 레더 원단으로 퀄리티가 돋보이며 자체만으로도 포인트가 되는 데일리 아이템!",
     "category": "자켓",
     "brand": "Lovesso",
-    "color": "블랙,크림",
+    "color": [
+      {"label": "블랙", "value": "블랙"},
+      {"label": "크림", "value": "크림"}
+    ],
     "price": 69900,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -220,9 +259,17 @@
     "explain": "울혼방 원단과 2온스 누빔 안감으로 따뜻한 코트! 백라인 슬릿으로 활동성은 업! 격식있는 자리에서도 활용 가능해요!",
     "category": "코트",
     "brand": "hangnine",
-    "color": "블랙,베이지",
+    "color": [
+      {"label": "블랙", "value": "블랙"},
+      {"label": "베이지", "value": "베이지"}
+    ],
     "price": 89900,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -263,9 +310,17 @@
     "explain": "포근함과 멋스러움을 동시에 만족시켜줄 무스탕 자켓! 도톰한 양털 원단과 소프트한 스웨이드 안감 처리로 따뜻하고 편해요!",
     "category": "자켓",
     "brand": "nice",
-    "color": "블랙,베이지",
+    "color": [
+      {"label": "블랙", "value": "블랙"},
+      {"label": "베이지", "value": "베이지"}
+    ],
     "price": 55000,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -306,9 +361,14 @@
     "explain": "어떤 룩에도 트렌디하게 매치되는 데님 팬츠! 허리라인 커버밴드로 편안하며 깔끔한 아웃핏!",
     "category": "바지",
     "brand": "lovessosso",
-    "color": "진청",
+    "color": [{"label": "진청", "value": "진청"}],
     "price": 29900,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -345,9 +405,17 @@
     "explain": "기모 안감이 더해진 도톰한 원단으로 부드럽고 따뜻하며 뛰어난 신축성으로 편안하게 활동 가능!",
     "category": "바지",
     "brand": "YATA",
-    "color": "브라운,블랙",
+    "color": [
+      {"label": "블랙", "value": "블랙"},
+      {"label": "브라운", "value": "브라운"}
+    ],
     "price": 32500,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
@@ -388,9 +456,17 @@
     "explain": "화사한 아이보리, 옐로우 컬러감으로 준비된 봄시즌 내내 데일리하게 활용하기 좋은 롱팬츠!",
     "category": "바지",
     "brand": "ZARAJARA",
-    "color": "아이보리,옐로우",
+    "color": [
+      {"label": "아이보리", "value": "아이보리"},
+      {"label": "옐로우", "value": "옐로우"}
+    ],
     "price": 28900,
-    "size": "S,M,L,XL",
+    "size": [
+      {"label": "S", "value": "S", "count": 200},
+      {"label": "M", "value": "M", "count": 0},
+      {"label": "L", "value": "L", "count": 2},
+      {"label": "XL", "value": "XL", "count": 20}
+    ],
     "isChecked": false,
     "thumbnailList": [
       {
