@@ -1,0 +1,34 @@
+{
+  "구매내역": [
+    {
+      "item": {},
+      "selectedOptions": [
+        {
+          "size": "M",
+          "color": "red",
+          "count": 2
+        },
+        {
+          "size": "S",
+          "color": "blue",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "item": {},
+      "selectedOptions": [
+        {
+          "size": "M",
+          "color": "red",
+          "count": 2
+        },
+        {
+          "size": "S",
+          "color": "blue",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

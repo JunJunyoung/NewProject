@@ -1,79 +1,104 @@
 import React from 'react';
-import {ScrollView, Text, Image} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import styled from 'styled-components/native';
 import ClothItem from '../components/ClothItem';
+import {useSelector} from 'react-redux';
+import ScrollViewCarousel from '../components/ScrollViewCarousel';
+import eventsImage from '../static/events.json';
 
-const content = [];
+const HALF_WINDOW_WIDTH = Dimensions.get('window').width / 2;
 
 const Home = () => {
+  const clothList = useSelector(state => state.clothList.clothList);
+
   return (
-    <Container>
-      <EventVieW>
-        <EventScrollView horizontal={true}>
-          <Image
-            source={{
-              uri: 'http://www.samsungsales.co.kr/images/event/sales/weekPromotion/ev_201907_03.jpg',
-            }}
-            style={{height: 300, width: 500}}
-          />
-          <Image
-            source={{
-              uri: 'https://img.freepik.com/free-psd/sport-event-horizontal-banner_23-2148947931.jpg?w=900&t=st=1674906388~exp=1674906988~hmac=ce9cdf44821b1f785c256fce5b2e9165e8cfab2b4da20acce86f886a1293a645',
-            }}
-            style={{height: 300, width: 500}}
-          />
-        </EventScrollView>
-      </EventVieW>
-      <RecommendText>회원님을 위한 추천상품</RecommendText>
-      {/* <ClothScrollView horizontal={false}>
+    <Container showsVerticalScrollIndicator={false} stickyHeaderIndices={[2]}>
+      <CarouselBox height={210}>
+        <ScrollViewCarousel pages={eventsImage} height={210} />
+      </CarouselBox>
+      <View
+        style={{
+          marginTop: 10,
+          borderBottomColor: '#E0E0E0',
+          borderBottomWidth: 1,
+        }}
+      />
+      <TextView>
+        <RecommendText>회원님을 위한 추천상품</RecommendText>
+        <SponsoredText>sponsored</SponsoredText>
+      </TextView>
+      <ClothContainer>
         <ClothView>
-          {content.map(item => {
-            const {
-              옷 리스트업 프롭스
-            } = item;
+          {clothList.map(item => {
+            const {contentId, price} = item;
+            const stringPrice = price
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             return (
-              <ClothItemWrapper>
-                <ClothItem 옷 리스트업 프롭스 />
+              <ClothItemWrapper key={contentId}>
+                <ClothItem
+                  contentId={contentId}
+                  price={stringPrice}
+                  containerHeight={250}
+                  height={180}
+                  containerWidth={HALF_WINDOW_WIDTH}
+                  heartSize={31}
+                  iconPaddingTop={8}
+                  iconPaddingLeft={142}
+                />
               </ClothItemWrapper>
             );
           })}
         </ClothView>
-      </ClothScrollView> */}
+      </ClothContainer>
     </Container>
   );
 };
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
+  background-color: white;
 `;
 
-const EventVieW = styled.View`
-  flex: 1;
+const CarouselBox = styled.View`
+  height: ${props => props.height}px;
+  margin-bottom: 0px;
+  background-color: white;
+  overflow: hidden;
 `;
 
-const EventScrollView = styled.ScrollView`
-  background-color: 'orange';
+const ClothContainer = styled.View`
+  margin-top: 8px;
+`;
+const TextView = styled.View`
+  height: 40px;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: white;
 `;
 
 const RecommendText = styled.Text`
-  flex: 1;
   font-size: 20px;
   text-align: left;
-  margin: 10px;
-  margin-left: 8px;
+  margin-top: 5px;
+  margin-left: 13px;
   color: black;
 `;
 
-const ClothScrollView = styled.ScrollView`
-  width: '100%';
-  background-color: '#F2F2F2';
+const SponsoredText = styled.Text`
+  font-size: 13px;
+  text-align: right;
+  margin: 2px;
+  margin-right: 13px;
+  margin-top: 17px;
+  color: gray;
 `;
 
 const ClothView = styled.View`
-  flex-direction: 'row';
-  flex-wrap: 'wrap';
-  padding-horizontal: 16px;
-  justify-content: 'space-around';
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* padding-horizontal: 2; */
+  justify-content: space-around;
 `;
 
 const ClothItemWrapper = styled.View`
