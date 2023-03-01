@@ -1,20 +1,20 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface basketProduct {
-  orderId: number;
-  orderColor: string;
-  orderSize: string;
-  contentId: number;
-  name: string;
-  explain: string;
-  category: string;
-  brand: string;
-  color: [];
-  price: number;
-  size: [];
-  isChecked: boolean;
-  thumnailList: [];
-  detailList: [];
+  orderItems: [];
+  existingItems: {
+    contentId: number;
+    name: string;
+    explain: string;
+    category: string;
+    brand: string;
+    color: [];
+    price: number;
+    size: [];
+    isChecked: boolean;
+    thumnailList: [];
+    detailList: [];
+  };
 }
 
 // BasketProducts = [
@@ -32,9 +32,7 @@ export const basketProductsSlice = createSlice({
     addBasketProduct: (
       state,
       action: PayloadAction<{
-        orderId: number;
-        orderColor: string;
-        orderSize: string;
+        optionList: [];
         contentId: number;
         name: string;
         explain: string;
@@ -49,20 +47,20 @@ export const basketProductsSlice = createSlice({
       }>,
     ) => {
       state.push({
-        orderId: action.payload.orderId,
-        orderColor: action.payload.orderColor,
-        orderSize: action.payload.orderSize,
-        contentId: action.payload.contentId,
-        name: action.payload.name,
-        explain: action.payload.explain,
-        category: action.payload.category,
-        brand: action.payload.brand,
-        color: action.payload.color,
-        price: action.payload.price,
-        size: action.payload.size,
-        isChecked: action.payload.isChecked,
-        thumnailList: action.payload.thumnailList,
-        detailList: action.payload.detailList,
+        orderItems: action.payload.optionList,
+        existingItems: {
+          contentId: action.payload.contentId,
+          name: action.payload.name,
+          explain: action.payload.explain,
+          category: action.payload.category,
+          brand: action.payload.brand,
+          color: action.payload.color,
+          price: action.payload.price,
+          size: action.payload.size,
+          isChecked: action.payload.isChecked,
+          thumnailList: action.payload.thumnailList,
+          detailList: action.payload.detailList,
+        },
       });
     },
   },

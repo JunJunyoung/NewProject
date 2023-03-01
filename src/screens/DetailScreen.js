@@ -188,7 +188,7 @@ function DetailScreen({route}) {
           width: '100%',
         }}>
         <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 4}}>
-          1,250명이 이 상품을 구매하는 중이에요 (구현예정)
+          1,250명이 이 상품을 구매하는 중이에요!
         </Text>
       </View>
       <View

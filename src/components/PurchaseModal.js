@@ -86,11 +86,14 @@ const PurchaseModal = props => {
   const setCloseModal = () => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
+
+  useEffect(() => {
+    console.log('optionList>>>', optionList);
+  }, [optionList]);
+
   const setValidator = () => {
     addBasketProduct({
-      orderId,
-      orderColor,
-      orderSize,
+      optionList,
       contentId,
       name,
       explain,
@@ -105,10 +108,6 @@ const PurchaseModal = props => {
     });
     setPurchaseVisible(false);
   };
-
-  useEffect(() => {
-    console.log('optionList>>>', optionList);
-  }, [optionList]);
 
   const totalQuantity = optionList.reduce(
     (acc, item) => acc + item.quantity,
