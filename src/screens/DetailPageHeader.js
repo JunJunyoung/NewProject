@@ -41,7 +41,7 @@ const DetailPageHeader = ({contentId, price, pointerEvents}) => {
       </View>
       <View
         style={{
-          marginTop: 10,
+          marginTop: 5,
         }}
       />
       <View style={{paddingTop: 5, backgroundColor: 'white'}}></View>

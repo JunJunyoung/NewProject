@@ -5,6 +5,7 @@ import ClothItem from '../components/ClothItem';
 import {useSelector} from 'react-redux';
 import ScrollViewCarousel from '../components/ScrollViewCarousel';
 import eventsImage from '../static/events.json';
+import {color} from 'react-native-reanimated';
 
 const HALF_WINDOW_WIDTH = Dimensions.get('window').width / 2;
 
@@ -30,7 +31,19 @@ const Home = () => {
       <ClothContainer>
         <ClothView>
           {clothList.map(item => {
-            const {contentId, price} = item;
+            const {
+              contentId,
+              price,
+              name,
+              explain,
+              category,
+              brand,
+              color,
+              size,
+              isChecked,
+              thumbnailList,
+              detailList,
+            } = item;
             const stringPrice = price
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -39,6 +52,15 @@ const Home = () => {
                 <ClothItem
                   contentId={contentId}
                   price={stringPrice}
+                  name={name}
+                  explain={explain}
+                  category={category}
+                  brand={brand}
+                  color={color}
+                  size={size}
+                  isChecked={isChecked}
+                  thumbnailList={thumbnailList}
+                  detailList={detailList}
                   containerHeight={250}
                   height={180}
                   containerWidth={HALF_WINDOW_WIDTH}

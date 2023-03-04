@@ -28,32 +28,5 @@ export const clothListSlice = createSlice({
   },
 });
 
-// export const isCheckedSelector = (state: RootState) : boolean =>
-//  state.clothList.clothList.isChecked;
-
-//  const isCheckedItemSelector = createSelector(
-//   isCheckedSelector,
-//   (isChecked) => {state.clothList.clothList.map(item => {item.isChecked === true ? item : null})}
-// );
-
 export const {toggle, toggleAll} = clothListSlice.actions;
 export default clothListSlice.reducer;
-
-// add: (
-//   state,
-//   action: PayloadAction<{
-//     picture: string;
-//     title: string;
-//     content: string;
-//   }>,
-// ) => {
-//   state.push({
-//     contentId: nextId,
-//     ...action.payload,
-//     isChecked: false,
-//   });
-//   nextId = +1;
-// },
-// remove: state => {
-//   state = state.filter(item => item.isChecked === false);
-// },

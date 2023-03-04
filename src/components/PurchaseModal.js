@@ -26,8 +26,10 @@ const PurchaseModal = props => {
     setPurchaseVisible,
     setOptionVisible,
   } = props;
-  const {addBasketProduct, closeModal} = useClothsRelatedActions();
   const clothList = useSelector(state => state.clothList.clothList);
+  const backetProduct = useSelector(state => state.basketProduct);
+  const {addBasketProduct, addnewBasketProduct, removeSameBasketProduct} =
+    useClothsRelatedActions();
   const clickedClothList = clothList.find(item => item.contentId === contentId);
   const {
     name,
@@ -87,26 +89,52 @@ const PurchaseModal = props => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
 
-  useEffect(() => {
-    console.log('optionList>>>', optionList);
-  }, [optionList]);
-
   const setValidator = () => {
-    addBasketProduct({
-      optionList,
-      contentId,
-      name,
-      explain,
-      category,
-      brand,
-      color,
-      price,
-      size,
-      isChecked,
-      thumbnailList,
-      detailList,
-    });
-    setPurchaseVisible(false);
+    const newOptionList = optionList.map(item =>
+      item.orderColor ===
+        backetProduct.filter(o => o?.orderItems?.orderColor) &&
+      item.orderSize === backetProduct.filter(o => o?.orderItems?.orderSize)
+        ? {
+            ...item,
+            quantity:
+              item.quantity + backetProduct.filter(c => c.orderItems.quantity),
+          }
+        : item,
+    );
+    backetProduct.filter(item => item.existingItems.name === name).length === 0
+      ? (addBasketProduct({
+          optionList,
+          contentId,
+          name,
+          explain,
+          category,
+          brand,
+          color,
+          price,
+          size,
+          isChecked,
+          thumbnailList,
+          detailList,
+        }),
+        setPurchaseVisible(false),
+        setOptionList([]))
+      : (addnewBasketProduct({
+          newOptionList,
+          contentId,
+          name,
+          explain,
+          category,
+          brand,
+          color,
+          price,
+          size,
+          isChecked,
+          thumbnailList,
+          detailList,
+        }),
+        removeSameBasketProduct(contentId),
+        setPurchaseVisible(false),
+        setOptionList([]));
   };
 
   const totalQuantity = optionList.reduce(

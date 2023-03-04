@@ -11,25 +11,28 @@ const ClothInfo = ({contentId}) => {
   // const clickedClothList = clothList.find(item => item.contentId === contentId);
   // const {detailList} = clickedClothList;
   return (
-    <ScrollView style={{flex: 1, backgroundColor: 'tomato'}}>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-      <Text>구현 중입니다</Text>
-    </ScrollView>
-    // <Container>
+    <Container>
+      <View style={{height: 800}}>
+        <ScrollView>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+          <Text>구현 중입니다</Text>
+        </ScrollView>
+      </View>
+    </Container>
     //   {detailList &&
     //     detailList.map(item => {
     //       const {detailID, uri} = item;
@@ -50,7 +53,6 @@ const ClothInfo = ({contentId}) => {
     //         </ClothItemWrapper>
     //       );
     //     })}
-    // </Container>
   );
 };
 

@@ -4,11 +4,19 @@ import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Octicons';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
 import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
 function ClothItem({
   contentId,
+  name,
+  explain,
+  category,
+  brand,
+  color,
+  size,
+  isChecked,
+  thumbnailList,
+  detailList,
   price,
   containerHeight,
   containerWidth,
@@ -18,21 +26,9 @@ function ClothItem({
   iconPaddingLeft,
 }) {
   const {addRecentProduct} = useClothsRelatedActions();
-  const clothList = useSelector(state => state.clothList.clothList);
-  const clickedClothList = clothList.find(item => item.contentId === contentId);
-  const {
-    name,
-    explain,
-    category,
-    brand,
-    color,
-    size,
-    isChecked,
-    thumbnailList,
-    detailList,
-  } = clickedClothList;
   const {toggle} = useClothsRelatedActions();
   const navigation = useNavigation();
+
   return (
     <Container
       containerHeight={containerHeight}

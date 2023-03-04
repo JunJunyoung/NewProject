@@ -1,13 +1,7 @@
 import React, {useCallback} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Animated,
-  Dimensions,
-  Image,
-} from 'react-native';
+import {View, Text, Animated, Dimensions, Image} from 'react-native';
 import {useSelector} from 'react-redux';
+import styled from 'styled-components/native';
 
 const window = Dimensions.get('window');
 
@@ -25,16 +19,16 @@ function CollapsibleFlatList(props) {
   const {detailList} = clickedClothList;
   const renderItem = useCallback(({item, index}) => {
     return (
-      <View style={{flex: 1}}>
+      <ImageView>
         <Image source={{uri: item.uri}} />
-      </View>
+      </ImageView>
     );
   }, []);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   return (
-    <View style={styles.rootContainer}>
+    <Container>
       <Animated.FlatList
         ref={ref => {
           let foundIndex = listArrRef.current.findIndex(
@@ -73,24 +67,19 @@ function CollapsibleFlatList(props) {
         onScrollEndDrag={props.onScrollEndDrag}
         bounces={false}
       />
-    </View>
+    </Container>
   );
 }
 
-const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-  },
-  itemContainer: {
-    width: '100%',
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  itemText: {
-    fontSize: 25,
-    color: '#FFD800',
-  },
-});
+const Container = styled.View`
+  flex: 1;
+`;
+
+const ImageView = styled.View`
+  height: 100px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default CollapsibleFlatList;

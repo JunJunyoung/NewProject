@@ -1,25 +1,24 @@
 import React from 'react';
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform, Dimensions} from 'react-native';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import ClothItem from '../components/ClothItem';
+
+const TRISECTION_WINDOW_WIDTH = Dimensions.get('window').width / 3;
 
 const Profile = () => {
   const navigation = useNavigation();
-  // const recentProduct = useSelector(state => state.recentProduct.recentProduct);
-  // const {
-  //   name,
-  //   explain,
-  //   category,
-  //   brand,
-  //   color,
-  //   price,
-  //   size,
-  //   thumbnailList,
-  //   detailList,
-  //   isChecked,
-  // } = recentProduct;
+  const recentProduct = useSelector(state => state.recentProduct);
+  const deletedRecentProduct = recentProduct.filter((items, index) => {
+    return (
+      recentProduct.findIndex((item, i) => {
+        return items.name === item.name;
+      }) === index
+    );
+  });
+
   return (
     <Container>
       <ProfileView>
@@ -66,22 +65,71 @@ const Profile = () => {
           borderBottomWidth: 1,
         }}
       />
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: 'bold',
-          color: '#202020',
-          marginLeft: 22,
-          marginTop: 20,
-        }}>
-        최근에 본 상품
-      </Text>
+      <View style={{height: 300}}>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: '#202020',
+            marginLeft: 20,
+            marginTop: 25,
+            marginBottom: 15,
+          }}>
+          최근에 본 상품
+        </Text>
+        <ClothContainer>
+          <ClothView>
+            {deletedRecentProduct.map(item => {
+              const {
+                contentId,
+                price,
+                name,
+                explain,
+                category,
+                brand,
+                color,
+                size,
+                isChecked,
+                thumbnailList,
+                detailList,
+              } = item;
+              const stringPrice = price
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              return (
+                <ClothItemWrapper key={contentId}>
+                  <ClothItem
+                    contentId={contentId}
+                    name={name}
+                    explain={explain}
+                    category={category}
+                    brand={brand}
+                    color={color}
+                    size={size}
+                    isChecked={isChecked}
+                    thumbnailList={thumbnailList}
+                    detailList={detailList}
+                    price={stringPrice}
+                    containerHeight={200}
+                    containerWidth={TRISECTION_WINDOW_WIDTH}
+                    height={110}
+                    heartSize={17}
+                    iconPaddingTop={6}
+                    iconPaddingLeft={90}
+                  />
+                </ClothItemWrapper>
+              );
+            })}
+          </ClothView>
+        </ClothContainer>
+      </View>
     </Container>
   );
 };
 
 const Container = styled.View`
   flex: 1;
+  background-color: white;
 `;
 
 const ProfileView = styled.View`
@@ -109,6 +157,8 @@ const StateTouchable = styled.TouchableHighlight`
   border-radius: 15px;
   background-color: white;
   margin: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
   padding: 15px;
   ${Platform.select({
     ios: {
@@ -126,9 +176,7 @@ const StateTouchable = styled.TouchableHighlight`
   })}
 `;
 
-const ClothContainer = styled.View`
-  margin-top: 8px;
-`;
+const ClothContainer = styled.ScrollView``;
 
 const ClothView = styled.View`
   flex-direction: row;

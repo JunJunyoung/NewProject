@@ -1,12 +1,12 @@
 import React, {useState, useCallback, useRef, useEffect} from 'react';
-import {View, StyleSheet, Animated, TouchableOpacity, Text} from 'react-native';
+import {View, Animated, TouchableOpacity, Text} from 'react-native';
 import {TabView} from 'react-native-tab-view';
 import DetailPageHeader from './DetailPageHeader';
 import CollapsibleFlatList from '../components/CollapsibleFlatList';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import BottomBuyButton from '../components/BottomBuyButton';
 
-const TABBAR_HEIGHT = 90;
+const TABBAR_HEIGHT = 100;
 
 function DetailScreen({route}) {
   const {contentId, price, isChecked} = route.params;
@@ -111,22 +111,28 @@ function DetailScreen({route}) {
       return (
         <Animated.View
           style={[
-            styles.collapsibleTabBar,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: TABBAR_HEIGHT,
+              backgroundColor: '#FFFFFF',
+              zIndex: 1,
+            },
             {transform: [{translateY: tabBarTranslateY}]},
           ]}>
           {props.navigationState.routes.map((route, idx) => {
             return (
               <TouchableOpacity
-                style={styles.collapsibleTabBarButton}
+                style={{flex: 1}}
                 key={idx}
                 onPress={() => {
                   onTabPress(idx);
                 }}>
-                <View style={styles.collapsibleTabBarLabelContainer}>
-                  <Text style={styles.collapsibleTabBarLabelText}>
+                <CollapsibleTabBarLabelContainer>
+                  <CollapsibleTabBarLabelText>
                     {route.title}
-                  </Text>
-                </View>
+                  </CollapsibleTabBarLabelText>
+                </CollapsibleTabBarLabelContainer>
               </TouchableOpacity>
             );
           })}
@@ -158,7 +164,7 @@ function DetailScreen({route}) {
   );
 
   return (
-    <View style={styles.rootContainer}>
+    <RootContainer>
       {headerHeight > 0 ? (
         <TabView
           navigationState={{index: tabIndex, routes: tabRoutes}}
@@ -169,12 +175,13 @@ function DetailScreen({route}) {
       ) : null}
       <Animated.View
         style={{
-          ...styles.headerContainer,
+          position: 'absolute',
+          width: '100%',
           transform: [{translateY: headerTranslateY}],
         }}
         onLayout={headerOnLayout}
         pointerEvents="box-none">
-        <DetailPageHeader contentId={contentId} />
+        <DetailPageHeader contentId={contentId} price={price} />
       </Animated.View>
       <View
         style={{
@@ -188,7 +195,7 @@ function DetailScreen({route}) {
           width: '100%',
         }}>
         <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 4}}>
-          1,250명이 이 상품을 구매하는 중이에요!
+          1,250명이 이 상품을 구매하는 중이에요
         </Text>
       </View>
       <View
@@ -204,112 +211,24 @@ function DetailScreen({route}) {
         isChecked={route.params.isChecked}
         contentId={route.params.contentId}
       />
-    </View>
+    </RootContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-  },
-  headerContainer: {
-    position: 'absolute',
-    width: '100%',
-  },
-  collapsibleTabBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: TABBAR_HEIGHT,
-    backgroundColor: '#FFFFFF',
-    zIndex: 1,
-  },
-  collapsibleTabBarButton: {
-    flex: 1,
-  },
-  collapsibleTabBarLabelContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  collapsibleTabBarLabelText: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-});
-
-// const renderScene = ({route, contentId, price}) => {
-//   switch (route.key) {
-//     case 'first':
-//       return <ClothInfo contentId={contentId} price={price} />;
-//     case 'Review':
-//       return <Review contentId={contentId} price={price} />;
-//     case 'AskView':
-//       return <AskView contentId={contentId} price={price} />;
-//     default:
-//       return null;
-//   }
-// };
-
-// function DetailScreen({route}) {
-//   const initialLayout = useWindowDimensions();
-
-//   const [index, setIndex] = useState(0);
-//   const [routes] = useState([
-//     {key: 'first', title: '상품정보'},
-//     {key: 'second', title: '리뷰'},
-//     {key: 'third', title: '문의'},
-//   ]);
-
-//   return (
-//     <View style={{flex: 1}}>
-//       <TabView
-//         contentId={route.params.contentId}
-//         price={route.params.price}
-//         navigationState={{index, routes}}
-//         renderScene={renderScene}
-//         onIndexChange={setIndex}
-//         initialLayout={{width: initialLayout.width}}
-//         style={{flex: 1, paddingTop: 590}}
-//         renderPager={props =>
-//           Platform.OS === 'ios' ? (
-//             <ScrollPager {...props} />
-//           ) : (
-//             <ViewPagerAdapter {...props} transition="curl" showPageIndicator />
-//           )
-//         }
-//         renderTabBar={props => (
-//           <TabBar
-//             {...props}
-//             indicatorStyle={{
-//               backgroundColor: 'black',
-//               border: 'none',
-//             }}
-//             style={{
-//               backgroundColor: 'white',
-//               shadowOffset: {height: 0, width: 0},
-//               shadowColor: 'gray',
-//             }}
-//             a
-//             inactiveColor={'gray'}
-//             activeColor={'black'}
-//             pressColor={'#C0C0C0'}
-//             labelStyle={{
-//               fontSize: 17,
-//               fontWeight: 'bold',
-//               paddingBottom: 4,
-//             }}
-//           />
-//         )}
-//       />
-//     </View>
-//   );
-// }
-
-const DetailScrollView = styled.ScrollView`
+const RootContainer = styled.View`
   flex: 1;
-  position: absolute;
-  height: 600px;
+`;
+
+const CollapsibleTabBarLabelContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+const CollapsibleTabBarLabelText = styled.Text`
+  font-size: 17;
+  font-weight: bold;
+  color: black;
 `;
 
 export default DetailScreen;
