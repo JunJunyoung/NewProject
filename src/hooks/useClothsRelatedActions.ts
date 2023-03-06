@@ -5,9 +5,8 @@ import {bindActionCreators} from '@reduxjs/toolkit';
 import {addRecentProduct} from '../redux/slice/RecentProducts';
 import {
   addBasketProduct,
-  removeSameBasketProduct,
   setSelected,
-  addnewBasketProduct,
+  addOverwriteBasketProduct,
 } from '../redux/slice/BasketProducts';
 
 export default function useClothsRelatedActions() {
@@ -20,9 +19,8 @@ export default function useClothsRelatedActions() {
           toggleAll,
           addRecentProduct,
           addBasketProduct,
-          removeSameBasketProduct,
           setSelected,
-          addnewBasketProduct,
+          addOverwriteBasketProduct,
         },
         dispatch,
       ),

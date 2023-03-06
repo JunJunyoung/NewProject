@@ -14,7 +14,7 @@ export interface basketProduct {
     price: number;
     size: [];
     isChecked: boolean;
-    thumnailList: [];
+    thumbnailList: [];
     detailList: [];
   };
 }
@@ -41,7 +41,7 @@ export const basketProductsSlice = createSlice({
         price: number;
         size: [];
         isChecked: boolean;
-        thumnailList: [];
+        thumbnailList: [];
         detailList: [];
       }>,
     ) => {
@@ -59,55 +59,26 @@ export const basketProductsSlice = createSlice({
           price: action.payload.price,
           size: action.payload.size,
           isChecked: action.payload.isChecked,
-          thumnailList: action.payload.thumnailList,
+          thumbnailList: action.payload.thumbnailList,
           detailList: action.payload.detailList,
         },
       });
       nextId += 1;
     },
-    addnewBasketProduct: (
+    addOverwriteBasketProduct: (
       state,
       action: PayloadAction<{
-        purchaseId: number;
-        isSelected: Boolean;
         newOptionList: [];
         contentId: number;
-        name: string;
-        explain: string;
-        category: string;
-        brand: string;
-        color: [];
-        price: number;
-        size: [];
-        isChecked: boolean;
-        thumnailList: [];
-        detailList: [];
       }>,
     ) => {
-      state.push({
-        purchaseId: nextId,
-        isSelected: false,
-        orderItems: action.payload.newOptionList,
-        existingItems: {
-          contentId: action.payload.contentId,
-          name: action.payload.name,
-          explain: action.payload.explain,
-          category: action.payload.category,
-          brand: action.payload.brand,
-          color: action.payload.color,
-          price: action.payload.price,
-          size: action.payload.size,
-          isChecked: action.payload.isChecked,
-          thumnailList: action.payload.thumnailList,
-          detailList: action.payload.detailList,
-        },
+      state = state.map(item => {
+        if (item.existingItems.contentId === action.payload.contentId) {
+          return {...item, orderItems: action.payload.newOptionList};
+        } else {
+          return item;
+        }
       });
-      nextId += 1;
-    },
-    removeSameBasketProduct: (state, action: PayloadAction<number>) => {
-      state = state.filter(
-        item => item.existingItems.contentId !== action.payload,
-      );
     },
     setSelected: (state, action: PayloadAction<number>) => {
       state = state.map(item => {
@@ -121,10 +92,6 @@ export const basketProductsSlice = createSlice({
   },
 });
 
-export const {
-  addBasketProduct,
-  addnewBasketProduct,
-  setSelected,
-  removeSameBasketProduct,
-} = basketProductsSlice.actions;
+export const {addBasketProduct, addOverwriteBasketProduct, setSelected} =
+  basketProductsSlice.actions;
 export default basketProductsSlice.reducer;

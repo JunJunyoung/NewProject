@@ -26,10 +26,13 @@ const PurchaseModal = props => {
     setPurchaseVisible,
     setOptionVisible,
   } = props;
-  const clothList = useSelector(state => state.clothList.clothList);
-  const backetProduct = useSelector(state => state.basketProduct);
-  const {addBasketProduct, addnewBasketProduct, removeSameBasketProduct} =
+  const {addBasketProduct, addOverwriteBasketProduct} =
     useClothsRelatedActions();
+  const basketProduct = useSelector(state => state.basketProduct);
+  const sameBasketProduct = basketProduct.find(
+    item => item.existingItems.contentId === contentId,
+  );
+  const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothList = clothList.find(item => item.contentId === contentId);
   const {
     name,
@@ -89,19 +92,27 @@ const PurchaseModal = props => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
 
+  const test = sameBasketProduct.orderItems.filter(item => {
+    return !optionList.some(other => other.ordercolor === item.orderColor);
+  });
+  console.log('test>>>', test);
+
   const setValidator = () => {
-    const newOptionList = optionList.map(item =>
-      item.orderColor ===
-        backetProduct.filter(o => o?.orderItems?.orderColor) &&
-      item.orderSize === backetProduct.filter(o => o?.orderItems?.orderSize)
+    //리덕스 배열 state 안의 객체들의 orderItems 배열 안에 key인 orderColor가
+    //optionList 배열 안의 key 인 orderColor와 같은지 판별
+    const newOptionList = sameBasketProduct.orderItems.filter(item =>
+      item.orderColor === optionList.map() &&
+      item.orderItems === optionList.find(a => a)
         ? {
             ...item,
             quantity:
-              item.quantity + backetProduct.filter(c => c.orderItems.quantity),
+              item.quantity +
+              basketProduct.filter(c => c?.orderItems?.quantity),
           }
         : item,
     );
-    backetProduct.filter(item => item.existingItems.name === name).length === 0
+    basketProduct.filter(item => item?.existingItems?.name === name)?.length ===
+    0
       ? (addBasketProduct({
           optionList,
           contentId,
@@ -118,21 +129,10 @@ const PurchaseModal = props => {
         }),
         setPurchaseVisible(false),
         setOptionList([]))
-      : (addnewBasketProduct({
+      : (addOverwriteBasketProduct({
           newOptionList,
           contentId,
-          name,
-          explain,
-          category,
-          brand,
-          color,
-          price,
-          size,
-          isChecked,
-          thumbnailList,
-          detailList,
         }),
-        removeSameBasketProduct(contentId),
         setPurchaseVisible(false),
         setOptionList([]));
   };

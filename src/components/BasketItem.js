@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, Dimensions, Text} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Dimensions,
+  Text,
+  ScrollView,
+} from 'react-native';
 import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Octicons';
@@ -29,22 +35,40 @@ function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
 
   return (
     <Container>
-      <View style={{marginTop: 18}}>
-        <Text style={{fontSize: 20, fontWight: 'bold'}}>{brand} 배송상품</Text>
+      <View
+        style={{
+          borderBottomColor: '#E0E0E0',
+          borderBottomWidth: 11,
+          marginTop: 3,
+        }}
+      />
+      <View
+        style={{
+          marginTop: 20,
+          marginLeft: 12,
+          height: 30,
+          width: Window_WIDTH,
+        }}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'black'}}>
+          {brand} 배송상품
+        </Text>
       </View>
       <BasketContainer>
         <BasketView>
-          {orderItems.map(item => {
+          {orderItems.map((item, index) => {
             const {orderId, orderColor, orderSize, quantity} = item;
             const stringPrice = price
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             return (
-              <ClothItemWrapper key={contentId}>
+              <ClothItemWrapper key={index}>
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    width: Window_WIDTH * 0.9,
+                    marginLeft: 15,
+                    marginTop: 15,
                   }}>
                   <BouncyCheckbox
                     size={22}
@@ -58,42 +82,64 @@ function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
                       borderColor: 'gray',
                     }}
                     fillColor="#f66"
-                    isChecked={checkboxState}
-                    onPress={() => setCheckboxState(!checkboxState)}
+                    // isChecked={checkboxState}
+                    // onPress={() => setCheckboxState(!checkboxState)}
                     disableText={true}
                   />
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('DetailScreen', {
-                        contentId,
-                        price,
-                        isChecked,
-                      });
-                      addRecentProduct({
-                        contentId,
-                        name,
-                        explain,
-                        category,
-                        brand,
-                        color,
-                        price,
-                        size,
-                        isChecked,
-                        thumbnailList,
-                        detailList,
-                      });
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                     }}>
-                    <ClothImage
-                      height={150}
-                      width={150}
-                      thumbnailList={thumbnailList}
-                    />
-                    <View style={{paddingTop: 5}}>
-                      <PriceText>{price}</PriceText>
-                      <NameText>{name}</NameText>
-                      <BrandText>{brand}</BrandText>
-                    </View>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('DetailScreen', {
+                          contentId,
+                          price,
+                          isChecked,
+                        });
+                        addRecentProduct({
+                          contentId,
+                          name,
+                          explain,
+                          category,
+                          brand,
+                          color,
+                          price,
+                          size,
+                          isChecked,
+                          thumbnailList,
+                          detailList,
+                        });
+                      }}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <ClothImage
+                          height={150}
+                          width={150}
+                          thumbnailList={thumbnailList}
+                        />
+                        <View style={{paddingTop: 5}}>
+                          <BrandText>{brand}</BrandText>
+                          <PriceText>{price}</PriceText>
+                          <NameText>{name}</NameText>
+                          <OptionView>
+                            <Text
+                              style={{
+                                fontSize: 15,
+                                marginLeft: 5,
+                                marginBottom: 3,
+                              }}>
+                              {orderColor} / {orderSize} / {quantity}
+                            </Text>
+                          </OptionView>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </ClothItemWrapper>
             );
@@ -123,16 +169,20 @@ const ClothImage = ({height, width, thumbnailList}) => {
 };
 
 const Container = styled.View`
-  flex: 1;
   width: ${Window_WIDTH}px;
-  padding-horizontal: 10px;
 `;
 
 const BasketContainer = styled.View`
   margin-top: 8px;
 `;
 
-const BasketItemItemWrapper = styled.View`
+const ClothView = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+`;
+
+const ClothItemWrapper = styled.View`
   padding-vertical: 4px;
 `;
 
@@ -147,7 +197,7 @@ const PriceText = styled.Text`
   font-weight: bold;
   text-align: left;
   margin: 2px;
-  margin-left: 5px;
+  margin-left: 8px;
   color: black;
 `;
 
@@ -156,16 +206,27 @@ const NameText = styled.Text`
   font-weight: bold;
   text-align: left;
   margin: 2px;
-  margin-left: 5px;
+  margin-left: 8px;
   color: black;
 `;
 
 const BrandText = styled.Text`
-  font-size: 10px;
+  font-size: 16px;
+  font-weight: bold;
   text-align: left;
   margin: 2px;
-  margin-left: 5px;
+  margin-left: 8px;
   color: gray;
+`;
+
+const OptionView = styled.View`
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 8px;
+  height: 45px;
+  width: 160px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
 `;
 
 export default BasketItem;

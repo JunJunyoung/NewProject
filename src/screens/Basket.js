@@ -4,16 +4,13 @@ import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import BasketItem from '../components/BasketItem';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
 const Basket = () => {
   const backetProduct = useSelector(state => state.basketProduct);
   const [checkboxState, setCheckboxState] = useState(false);
-  const sameProductOptionList = backetProduct.map(item => item.orderItems);
-  // backetProduct.slice(2, 3);
-  console.log('sameProductOptionList>>>', sameProductOptionList);
-
   const deleteIsChecked = () => {
     Alert.alert(
       '삭제',
@@ -37,68 +34,75 @@ const Basket = () => {
 
   return (
     <Container>
-      <TopView>
-        <View style={{flexDirection: 'row'}}>
-          {checkboxState === false ? (
-            <BouncyCheckbox
-              size={22}
-              iconStyle={{
-                borderRadius: 0,
-                borderColor: '#f66',
-              }}
-              innerIconStyle={{
-                borderRadius: 0,
-                borderWidth: 2.5,
-                borderColor: 'gray',
-              }}
-              fillColor="#f66"
-              isChecked={checkboxState}
-              onPress={() => setCheckboxState(!checkboxState)}
-              disableText={true}
-            />
-          ) : (
-            <BouncyCheckbox
-              size={22}
-              iconStyle={{
-                borderRadius: 0,
-                borderColor: '#f66',
-              }}
-              innerIconStyle={{
-                borderRadius: 0,
-                borderWidth: 2.5,
-                borderColor: '#f66',
-              }}
-              fillColor="#f66"
-              isChecked={checkboxState}
-              onPress={() => setCheckboxState(!checkboxState)}
-              disableText={true}
-            />
-          )}
-          <SelectedText>전체 선택 ({})</SelectedText>
-        </View>
-        <DeleteButton onPress={() => deleteIsChecked()}>
-          <DeleteText style={{textAlign: 'right', fontWeight: 'bold'}}>
-            선택 삭제
-          </DeleteText>
-        </DeleteButton>
-      </TopView>
-      <BasketInfoContainer>
-        <BasketInfoView>
-          {backetProduct.map(item => {
-            const {purchaseId, isSelected, orderItems, existingItems} = item;
-            return (
-              <BasketItemWrapper key={purchaseId}>
-                <BasketItem
-                  purchaseId={purchaseId}
-                  isSelected={isSelected}
-                  orderItems={orderItems}
-                  existingItems={existingItems}
-                />
-              </BasketItemWrapper>
-            );
-          })}
-        </BasketInfoView>
-      </BasketInfoContainer>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[0]}>
+        <TopView>
+          <View style={{flexDirection: 'row', marginLeft: 15}}>
+            {checkboxState === false ? (
+              <BouncyCheckbox
+                size={22}
+                iconStyle={{
+                  borderRadius: 0,
+                  borderColor: '#f66',
+                }}
+                innerIconStyle={{
+                  borderRadius: 0,
+                  borderWidth: 2.5,
+                  borderColor: 'gray',
+                }}
+                fillColor="#f66"
+                isChecked={checkboxState}
+                onPress={() => setCheckboxState(!checkboxState)}
+                disableText={true}
+              />
+            ) : (
+              <BouncyCheckbox
+                size={22}
+                iconStyle={{
+                  borderRadius: 0,
+                  borderColor: '#f66',
+                }}
+                innerIconStyle={{
+                  borderRadius: 0,
+                  borderWidth: 2.5,
+                  borderColor: '#f66',
+                }}
+                fillColor="#f66"
+                isChecked={checkboxState}
+                onPress={() => setCheckboxState(!checkboxState)}
+                disableText={true}
+              />
+            )}
+            <SelectedText>전체 선택 ({})</SelectedText>
+          </View>
+          <DeleteButton onPress={() => deleteIsChecked()}>
+            <DeleteText style={{textAlign: 'right', fontWeight: 'bold'}}>
+              선택 삭제
+            </DeleteText>
+          </DeleteButton>
+        </TopView>
+        <BasketInfoContainer>
+          <BasketInfoView>
+            {backetProduct.map(item => {
+              const {purchaseId, isSelected, orderItems, existingItems} = item;
+              return (
+                <BasketItemWrapper key={purchaseId}>
+                  <BasketItem
+                    purchaseId={purchaseId}
+                    isSelected={isSelected}
+                    orderItems={orderItems}
+                    existingItems={existingItems}
+                  />
+                </BasketItemWrapper>
+              );
+            })}
+          </BasketInfoView>
+        </BasketInfoContainer>
+      </ScrollView>
+      <View style={{height: 140}}>
+        <Text> 최종 가격</Text>
+      </View>
       <BottomBuynView>
         <BuyButton>
           <BuyText>구매하기</BuyText>
@@ -114,11 +118,10 @@ const Container = styled.View`
 `;
 
 const TopView = styled.View`
-  height: 40px;
+  height: 45px;
   flex-direction: row;
   justify-content: space-between;
   background-color: white;
-  margin-left: 15px;
 `;
 
 const SelectedText = styled.Text`
