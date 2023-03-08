@@ -30,7 +30,9 @@ const Profile = () => {
         </ProfileTouchable>
       </ProfileView>
       <StateView>
-        <StateTouchable underlayColor={'#E0E0E0'}>
+        <StateTouchable
+          underlayColor={'#E0E0E0'}
+          onPress={() => navigation.navigate('Order')}>
           <View
             style={{
               flexDirection: 'row',

@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export interface basketProduct {
+export interface orderProduct {
   purchaseId: number;
   orderItems: [];
   existingItems: {
@@ -18,14 +18,14 @@ export interface basketProduct {
   };
 }
 
-const initialState: basketProduct[] = [];
+const initialState: orderProduct[] = [];
 let nextId = 1;
 
 export const basketProductsSlice = createSlice({
-  name: 'basketProducts',
-  initialState: {basketProduct: initialState},
+  name: 'orderProducts',
+  initialState: {orderProduct: initialState},
   reducers: {
-    addBasketProduct: (
+    addOrderProduct: (
       state,
       action: PayloadAction<{
         purchaseId: number;
@@ -43,7 +43,7 @@ export const basketProductsSlice = createSlice({
         detailList: [];
       }>,
     ) => {
-      state.basketProduct.push({
+      state.orderProduct.push({
         purchaseId: nextId,
         orderItems: action.payload.optionList,
         existingItems: {
@@ -62,30 +62,8 @@ export const basketProductsSlice = createSlice({
       });
       nextId += 1;
     },
-    addOverwriteBasketProduct: (
-      state,
-      action: PayloadAction<{
-        newOptionList: [];
-        contentId: number;
-      }>,
-    ) => {
-      state.basketProduct = state.basketProduct.map(item => {
-        if (item.existingItems.contentId === action.payload.contentId) {
-          return {...item, orderItems: action.payload.newOptionList};
-        } else {
-          return item;
-        }
-      });
-    },
-    isSelectedChangedProduct: (state, action: PayloadAction<[]>) => {
-      state.basketProduct = action.payload;
-    },
   },
 });
 
-export const {
-  addBasketProduct,
-  addOverwriteBasketProduct,
-  isSelectedChangedProduct,
-} = basketProductsSlice.actions;
+export const {addOrderProduct} = basketProductsSlice.actions;
 export default basketProductsSlice.reducer;

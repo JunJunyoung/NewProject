@@ -1,7 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {create} from 'react-test-renderer';
 import storage from '../../static/storage.json';
-import {RootState} from '../store';
 
 export const clothListSlice = createSlice({
   name: 'clothList',

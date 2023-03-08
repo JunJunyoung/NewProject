@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, Dimensions, Alert} from 'react-native';
+import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
 import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -9,8 +9,8 @@ import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
-const Basket = () => {
-  const basketProduct = useSelector(state => state.basketProduct.basketProduct);
+const Order = () => {
+  const basketProduct = useSelector(state => state.orderProduct.orderProduct);
   const [checkboxState, setCheckboxState] = useState(false);
   const {isSelectedChangedProduct} = useClothsRelatedActions();
   const allIsSelectedTrueProduct = basketProduct.map(item => {
@@ -47,17 +47,11 @@ const Basket = () => {
     );
   };
 
-  const IsSelectedProduct = basketProduct.filter(
-    item => item.orderItems.filter(c => c.isSelected === true).length,
-  ).length;
-
-  const selectedProductPrice = basketProduct.reduce(
-    (acc, item) => acc + item,
-    0,
-  );
-
-  console.log('selectedProductPrice>>>', selectedProductPrice);
-
+  // const totalQuantity = basketProduct.reduce(
+  //   (acc, item) => acc + item.quantity,
+  //   0,
+  // );
+  // const totalCalculatedPrice = totalQuantity * price;
   // const totalPrice = totalCalculatedPrice
   //   .toString()
   //   .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -143,9 +137,7 @@ const Basket = () => {
             flexDirection: 'row',
             marginLeft: 20,
           }}>
-          <Text style={{color: 'black', fontSize: 15}}>
-            {IsSelectedProduct}
-          </Text>
+          <Text style={{color: 'black'}}>totalQuantity</Text>
           <Text> 개 선택</Text>
         </View>
         <View
@@ -273,4 +265,4 @@ const CalculatedView = styled.View`
   width: ${Window_WIDTH}px;
 `;
 
-export default Basket;
+export default Order;

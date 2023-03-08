@@ -28,7 +28,7 @@ const PurchaseModal = props => {
   } = props;
   const {addBasketProduct, addOverwriteBasketProduct} =
     useClothsRelatedActions();
-  const basketProduct = useSelector(state => state.basketProduct);
+  const basketProduct = useSelector(state => state.basketProduct.basketProduct);
   const sameBasketProduct = basketProduct.find(
     item => item.existingItems.contentId === contentId,
   );
@@ -92,27 +92,33 @@ const PurchaseModal = props => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
 
-  const test = sameBasketProduct.orderItems.filter(item => {
-    return !optionList.some(other => other.ordercolor === item.orderColor);
-  });
-  console.log('test>>>', test);
+  const sameOptionList = sameBasketProduct?.orderItems?.filter(item =>
+    optionList.filter(
+      o => o.orderColor === item.orderColor && o.orderSize === item.orderSize,
+    ),
+  );
 
   const setValidator = () => {
-    //리덕스 배열 state 안의 객체들의 orderItems 배열 안에 key인 orderColor가
-    //optionList 배열 안의 key 인 orderColor와 같은지 판별
-    const newOptionList = sameBasketProduct.orderItems.filter(item =>
-      item.orderColor === optionList.map() &&
-      item.orderItems === optionList.find(a => a)
+    const newOptionList = sameBasketProduct?.orderItems?.map(item =>
+      optionList.filter(
+        o => o.orderColor === item.orderColor && o.orderSize === item.orderSize,
+      ).length > 0
         ? {
             ...item,
             quantity:
               item.quantity +
-              basketProduct.filter(c => c?.orderItems?.quantity),
+              //optionList의 컬러, 사이즈 동일한 객체의 quantity
+              optionList.find(
+                i =>
+                  i.orderColor === item.orderColor &&
+                  i.orderSize === item.orderSize,
+              ).quantity,
           }
         : item,
     );
-    basketProduct.filter(item => item?.existingItems?.name === name)?.length ===
-    0
+
+    basketProduct.filter(item => item?.existingItems?.contentId === contentId)
+      ?.length === 0
       ? (addBasketProduct({
           optionList,
           contentId,

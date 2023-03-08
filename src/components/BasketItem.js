@@ -9,13 +9,14 @@ import {
 import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Octicons';
+import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
-function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
+function BasketItem({purchaseId, orderItems, existingItems}) {
   const {
     contentId,
     name,
@@ -29,8 +30,9 @@ function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
     thumbnailList,
     detailList,
   } = existingItems;
-  const {addRecentProduct} = useClothsRelatedActions();
-  const {setSelected} = useClothsRelatedActions();
+  const basketProduct = useSelector(state => state.basketProduct.basketProduct);
+  const {addRecentProduct, isSelectedChangedProduct} =
+    useClothsRelatedActions();
   const navigation = useNavigation();
 
   return (
@@ -56,10 +58,26 @@ function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
       <BasketContainer>
         <BasketView>
           {orderItems.map((item, index) => {
-            const {orderId, orderColor, orderSize, quantity} = item;
+            const {isSelected, orderId, orderColor, orderSize, quantity} = item;
             const stringPrice = price
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const isSelectedTrueOrderItem = basketProduct.map(item => {
+              const newOne = item.orderItems.map(c =>
+                item.purchaseId === purchaseId && c.orderId === orderId
+                  ? {...c, isSelected: true}
+                  : c,
+              );
+              return {...item, orderItems: newOne};
+            });
+            const isSelectedFalseOrderItem = basketProduct.map(item => {
+              const newOne = item.orderItems.map(c =>
+                item.purchaseId === purchaseId && c.orderId === orderId
+                  ? {...c, isSelected: false}
+                  : c,
+              );
+              return {...item, orderItems: newOne};
+            });
             return (
               <ClothItemWrapper key={index}>
                 <View
@@ -70,22 +88,47 @@ function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
                     marginLeft: 15,
                     marginTop: 15,
                   }}>
-                  <BouncyCheckbox
-                    size={22}
-                    iconStyle={{
-                      borderRadius: 0,
-                      borderColor: '#f66',
-                    }}
-                    innerIconStyle={{
-                      borderRadius: 0,
-                      borderWidth: 2.5,
-                      borderColor: 'gray',
-                    }}
-                    fillColor="#f66"
-                    // isChecked={checkboxState}
-                    // onPress={() => setCheckboxState(!checkboxState)}
-                    disableText={true}
-                  />
+                  {isSelected === false ? (
+                    <BouncyCheckbox
+                      size={22}
+                      iconStyle={{
+                        borderRadius: 0,
+                        borderColor: '#f66',
+                      }}
+                      innerIconStyle={{
+                        borderRadius: 0,
+                        borderWidth: 2.5,
+                        borderColor: 'gray',
+                      }}
+                      fillColor="#f66"
+                      isChecked={isSelected}
+                      onPress={() => {
+                        isSelectedChangedProduct(isSelectedTrueOrderItem);
+                      }}
+                      disableText={true}
+                      disableBuiltInState
+                    />
+                  ) : (
+                    <BouncyCheckbox
+                      size={22}
+                      iconStyle={{
+                        borderRadius: 0,
+                        borderColor: '#f66',
+                      }}
+                      innerIconStyle={{
+                        borderRadius: 0,
+                        borderWidth: 2.5,
+                        borderColor: '#f66',
+                      }}
+                      fillColor="#f66"
+                      isChecked={isSelected}
+                      onPress={() => {
+                        isSelectedChangedProduct(isSelectedFalseOrderItem);
+                      }}
+                      disableText={true}
+                      disableBuiltInState
+                    />
+                  )}
                   <View
                     style={{
                       flexDirection: 'row',
@@ -124,7 +167,7 @@ function BasketItem({purchaseId, isSelected, orderItems, existingItems}) {
                         />
                         <View style={{paddingTop: 5}}>
                           <BrandText>{brand}</BrandText>
-                          <PriceText>{price}</PriceText>
+                          <PriceText>{stringPrice}</PriceText>
                           <NameText>{name}</NameText>
                           <OptionView>
                             <Text

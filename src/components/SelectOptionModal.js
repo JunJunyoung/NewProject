@@ -120,6 +120,7 @@ const SelectOptionModal = props => {
             quantity: 1,
             price: price,
             remainInventory: size.find(item => item.value === sizeValue).count,
+            isSelected: false,
           },
         ]),
         setColorValue(null),

@@ -5,9 +5,10 @@ import {bindActionCreators} from '@reduxjs/toolkit';
 import {addRecentProduct} from '../redux/slice/RecentProducts';
 import {
   addBasketProduct,
-  setSelected,
   addOverwriteBasketProduct,
+  isSelectedChangedProduct,
 } from '../redux/slice/BasketProducts';
+import {addOrderProduct} from '../redux/slice/OrderProducts';
 
 export default function useClothsRelatedActions() {
   const dispatch = useDispatch();
@@ -19,8 +20,9 @@ export default function useClothsRelatedActions() {
           toggleAll,
           addRecentProduct,
           addBasketProduct,
-          setSelected,
           addOverwriteBasketProduct,
+          isSelectedChangedProduct,
+          addOrderProduct,
         },
         dispatch,
       ),
