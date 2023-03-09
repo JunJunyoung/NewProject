@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface recentProduct {
-  seenContentId: number;
+  contentId: number;
   name: string;
   explain: string;
   category: string;
@@ -10,14 +10,12 @@ export interface recentProduct {
   price: number;
   size: [];
   isChecked: boolean;
-  thumnailList: [];
+  thumbnailList: [];
   detailList: [];
 }
 
-// export interface recentProduct extends Array<recentProduct> {}
-
-let nextId = 1;
 const initialState: recentProduct[] = [];
+let nextId = 1;
 
 export const recentProductsSlice = createSlice({
   name: 'recentProducts',
@@ -26,7 +24,7 @@ export const recentProductsSlice = createSlice({
     addRecentProduct: (
       state,
       action: PayloadAction<{
-        seenContentId: number;
+        contentId: number;
         name: string;
         explain: string;
         category: string;
@@ -35,12 +33,12 @@ export const recentProductsSlice = createSlice({
         price: number;
         size: [];
         isChecked: boolean;
-        thumnailList: [];
+        thumbnailList: [];
         detailList: [];
       }>,
     ) => {
       state.unshift({
-        seenContentId: nextId,
+        contentId: nextId,
         name: action.payload.name,
         explain: action.payload.explain,
         category: action.payload.category,
@@ -49,10 +47,10 @@ export const recentProductsSlice = createSlice({
         price: action.payload.price,
         size: action.payload.size,
         isChecked: action.payload.isChecked,
-        thumnailList: action.payload.thumnailList,
+        thumbnailList: action.payload.thumbnailList,
         detailList: action.payload.detailList,
       });
-      nextId = +1;
+      nextId += 1;
     },
   },
 });

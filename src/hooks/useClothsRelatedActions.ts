@@ -3,7 +3,12 @@ import {useMemo} from 'react';
 import {toggle, toggleAll} from '../redux/slice/ClothList';
 import {bindActionCreators} from '@reduxjs/toolkit';
 import {addRecentProduct} from '../redux/slice/RecentProducts';
-import {addBasketProduct} from '../redux/slice/BasketProducts';
+import {
+  addBasketProduct,
+  addOverwriteBasketProduct,
+  isSelectedChangedProduct,
+} from '../redux/slice/BasketProducts';
+import {addOrderProduct} from '../redux/slice/OrderProducts';
 
 export default function useClothsRelatedActions() {
   const dispatch = useDispatch();
@@ -15,6 +20,9 @@ export default function useClothsRelatedActions() {
           toggleAll,
           addRecentProduct,
           addBasketProduct,
+          addOverwriteBasketProduct,
+          isSelectedChangedProduct,
+          addOrderProduct,
         },
         dispatch,
       ),

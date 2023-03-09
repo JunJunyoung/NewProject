@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import ClothItem from '../components/ClothItem';
 import {useSelector} from 'react-redux';
 import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
+import {exp} from 'react-native-reanimated';
 
 const TRISECTION_WINDOW_WIDTH = Dimensions.get('window').width / 3;
 
@@ -13,7 +14,7 @@ const Want = () => {
   const deleteIsChecked = () => {
     Alert.alert(
       '삭제',
-      '정말로 삭제하시겠습니까?',
+      '모두 삭제하시겠습니까?',
       [
         {text: '취소', onPress: () => {}, style: 'cancel'},
         {
@@ -43,7 +44,19 @@ const Want = () => {
       <ClothContainer>
         <ClothView>
           {clothList.map(item => {
-            const {contentId, price, isChecked} = item;
+            const {
+              contentId,
+              price,
+              name,
+              explain,
+              category,
+              brand,
+              color,
+              size,
+              isChecked,
+              thumbnailList,
+              detailList,
+            } = item;
             const stringPrice = price
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -53,6 +66,15 @@ const Want = () => {
                   <ClothItem
                     contentId={contentId}
                     price={stringPrice}
+                    name={name}
+                    explain={explain}
+                    category={category}
+                    brand={brand}
+                    color={color}
+                    size={size}
+                    isChecked={isChecked}
+                    thumbnailList={thumbnailList}
+                    detailList={detailList}
                     containerHeight={200}
                     containerWidth={TRISECTION_WINDOW_WIDTH}
                     height={110}
@@ -78,6 +100,7 @@ const Container = styled.ScrollView`
 const ClothContainer = styled.View`
   margin-top: 8px;
 `;
+
 const TopView = styled.View`
   height: 40px;
   flex-direction: row;

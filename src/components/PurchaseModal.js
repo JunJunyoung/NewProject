@@ -26,7 +26,12 @@ const PurchaseModal = props => {
     setPurchaseVisible,
     setOptionVisible,
   } = props;
-  const {addBasketProduct, closeModal} = useClothsRelatedActions();
+  const {addBasketProduct, addOverwriteBasketProduct} =
+    useClothsRelatedActions();
+  const basketProduct = useSelector(state => state.basketProduct.basketProduct);
+  const sameBasketProduct = basketProduct.find(
+    item => item.existingItems.contentId === contentId,
+  );
   const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothList = clothList.find(item => item.contentId === contentId);
   const {
@@ -87,26 +92,55 @@ const PurchaseModal = props => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
 
-  useEffect(() => {
-    console.log('optionList>>>', optionList);
-  }, [optionList]);
+  const sameOptionList = sameBasketProduct?.orderItems?.filter(item =>
+    optionList.filter(
+      o => o.orderColor === item.orderColor && o.orderSize === item.orderSize,
+    ),
+  );
 
   const setValidator = () => {
-    addBasketProduct({
-      optionList,
-      contentId,
-      name,
-      explain,
-      category,
-      brand,
-      color,
-      price,
-      size,
-      isChecked,
-      thumbnailList,
-      detailList,
-    });
-    setPurchaseVisible(false);
+    const newOptionList = sameBasketProduct?.orderItems?.map(item =>
+      optionList.filter(
+        o => o.orderColor === item.orderColor && o.orderSize === item.orderSize,
+      ).length > 0
+        ? {
+            ...item,
+            quantity:
+              item.quantity +
+              //optionList의 컬러, 사이즈 동일한 객체의 quantity
+              optionList.find(
+                i =>
+                  i.orderColor === item.orderColor &&
+                  i.orderSize === item.orderSize,
+              ).quantity,
+          }
+        : item,
+    );
+
+    basketProduct.filter(item => item?.existingItems?.contentId === contentId)
+      ?.length === 0
+      ? (addBasketProduct({
+          optionList,
+          contentId,
+          name,
+          explain,
+          category,
+          brand,
+          color,
+          price,
+          size,
+          isChecked,
+          thumbnailList,
+          detailList,
+        }),
+        setPurchaseVisible(false),
+        setOptionList([]))
+      : (addOverwriteBasketProduct({
+          newOptionList,
+          contentId,
+        }),
+        setPurchaseVisible(false),
+        setOptionList([]));
   };
 
   const totalQuantity = optionList.reduce(
