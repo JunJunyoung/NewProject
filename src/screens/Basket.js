@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {View, Text, TouchableOpacity, Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
@@ -12,7 +12,7 @@ const Window_WIDTH = Dimensions.get('window').width;
 const Basket = () => {
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
   const [checkboxState, setCheckboxState] = useState(false);
-  const {isSelectedChangedProduct} = useClothsRelatedActions();
+  const {isSelectedChangedProduct, addOrderProduct} = useClothsRelatedActions();
   const allIsSelectedTrueProduct = basketProduct.map(item => {
     const newOne = item.orderItems.map(c =>
       c.isSelected === false ? {...c, isSelected: true} : c,
@@ -25,17 +25,49 @@ const Basket = () => {
     );
     return {...item, orderItems: newOne};
   });
+  const SelectedItemsDeleteArr = basketProduct.filter(item => {
+    if (item.orderItems.every(c => c.isSelected === false) === true) {
+      return {item};
+    }
+  });
+  const SelectedItemsArr = basketProduct.filter(item => {
+    if (item.orderItems.every(c => c.isSelected === true) === true) {
+      return {item};
+    }
+  });
+  const idNameChangeSelectedItemsArr = SelectedItemsArr.map(
+    ({purchaseId: orderId, ...item}) => ({
+      orderId,
+      ...item,
+    }),
+  );
+  let today = new Date();
+  let time = {
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+    date: today.getDate(),
+    hours: today.getHours(),
+    minutes: today.getMinutes(),
+  };
 
-  const deleteIsChecked = () => {
+  const timeAddedroduct = idNameChangeSelectedItemsArr.map(item => ({
+    ...item,
+    orderTime: '',
+  }));
+  const orderProduct = timeAddedroduct.map(item => {
+    return {...item, orderTime: time};
+  });
+
+  const deleteIsSelected = () => {
     Alert.alert(
       '삭제',
-      '정말로 삭제하시겠습니까?',
+      '선택하신 상품을 삭제하시겠습니까?',
       [
         {text: '취소', onPress: () => {}, style: 'cancel'},
         {
           text: '삭제',
           onPress: () => {
-            toggleAll();
+            isSelectedChangedProduct(SelectedItemsDeleteArr);
           },
           style: 'destructive',
         },
@@ -47,20 +79,36 @@ const Basket = () => {
     );
   };
 
+  const purchaseCompleted = () => {
+    Alert.alert(
+      '주문 완료',
+      '주문이 완료되었습니다.',
+      [{text: '계속 쇼핑하기', onPress: () => {}, style: 'cancel'}],
+      {
+        cancelable: false,
+      },
+    );
+    addOrderProduct(orderProduct);
+    isSelectedChangedProduct(SelectedItemsDeleteArr);
+  };
+
   const IsSelectedProduct = basketProduct.filter(
     item => item.orderItems.filter(c => c.isSelected === true).length,
   ).length;
 
   const selectedProductPrice = basketProduct.reduce(
-    (acc, item) => acc + item,
+    (acc, item) =>
+      acc +
+      item.orderItems.reduce(
+        (ac, i) => (i.isSelected === true ? ac + i.price * i.quantity : 0),
+        0,
+      ),
     0,
   );
 
-  console.log('selectedProductPrice>>>', selectedProductPrice);
-
-  // const totalPrice = totalCalculatedPrice
-  //   .toString()
-  //   .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const totalPrice = selectedProductPrice
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   return (
     <Container>
@@ -112,7 +160,7 @@ const Basket = () => {
             )}
             <SelectedText>전체 선택</SelectedText>
           </View>
-          <DeleteButton onPress={() => deleteIsChecked()}>
+          <DeleteButton onPress={() => deleteIsSelected()}>
             <DeleteText style={{textAlign: 'right', fontWeight: 'bold'}}>
               선택 삭제
             </DeleteText>
@@ -168,12 +216,12 @@ const Basket = () => {
               fontWeight: 'bold',
               color: 'red',
             }}>
-            totalPrice 원
+            {totalPrice} 원
           </Text>
         </View>
       </CalculatedView>
       <BottomBuynView>
-        <BuyButton>
+        <BuyButton onPress={() => purchaseCompleted()}>
           <BuyText>주문하기</BuyText>
         </BuyButton>
       </BottomBuynView>

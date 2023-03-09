@@ -10,7 +10,9 @@ const TRISECTION_WINDOW_WIDTH = Dimensions.get('window').width / 3;
 
 const Profile = () => {
   const navigation = useNavigation();
+  const clothList = useSelector(state => state.clothList.clothList);
   const recentProduct = useSelector(state => state.recentProduct);
+  const orderProduct = useSelector(state => state.orderProduct.orderProduct);
   const deletedRecentProduct = recentProduct.filter((items, index) => {
     return (
       recentProduct.findIndex((item, i) => {
@@ -18,6 +20,10 @@ const Profile = () => {
       }) === index
     );
   });
+
+  const wantItemNumber = clothList.filter(
+    item => item.isChecked === true,
+  ).length;
 
   return (
     <Container>
@@ -42,6 +48,9 @@ const Profile = () => {
             <Text style={{fontSize: 18, fontWeight: 'bold', color: '#202020'}}>
               주문 내역
             </Text>
+            <Text style={{fontSize: 23, fontWeight: 'bold', color: 'blue'}}>
+              {orderProduct.length}
+            </Text>
             <Icon size={30} name="chevron-right" color="#A0A0A0" />
           </View>
         </StateTouchable>
@@ -56,6 +65,9 @@ const Profile = () => {
             }}>
             <Text style={{fontSize: 18, fontWeight: 'bold', color: '#202020'}}>
               찜 관리
+            </Text>
+            <Text style={{fontSize: 23, fontWeight: 'bold', color: 'blue'}}>
+              {wantItemNumber}
             </Text>
             <Icon size={30} name="chevron-right" color="#A0A0A0" />
           </View>
