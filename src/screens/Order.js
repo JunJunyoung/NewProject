@@ -12,9 +12,7 @@ const Order = () => {
 
   return (
     <Container>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[1]}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             borderBottomColor: '#E0E0E0',
@@ -26,34 +24,35 @@ const Order = () => {
             <Text style={{fontSize: 18, color: 'gray'}}>배송중</Text>
             <Text
               style={{
-                fontSize: 28,
+                fontSize: 27,
                 color: 'black',
-                marginLeft: 16,
+                marginLeft: 18.5,
               }}>
-              0
+              {orderProduct.length}
             </Text>
           </View>
-          <View
-            style={{
-              borderRightColor: '#E0E0E0',
-              borderRightWidth: 1,
-            }}
-          />
+          <View style={{borderRightColor: '#E0E0E0', borderRightWidth: 1}} />
           <View style={{justifyContent: 'center', alignContent: 'center'}}>
             <Text style={{fontSize: 18, color: 'gray'}}>배송완료</Text>
-            <Text style={{fontSize: 28, color: 'black', marginLeft: 20}}>
+            <Text style={{fontSize: 27, color: 'black', marginLeft: 24}}>
               0
             </Text>
           </View>
+          <View style={{borderRightColor: '#E0E0E0', borderRightWidth: 1}} />
           <View
             style={{
-              borderRightColor: '#E0E0E0',
-              borderRightWidth: 1,
-            }}
-          />
-          <View style={{justifyContent: 'center', alignContent: 'center'}}>
-            <Text style={{fontSize: 18, color: 'gray'}}>취소 / 반품</Text>
-            <Text style={{fontSize: 28, color: 'black', marginLeft: 25}}>
+              justifyContent: 'center',
+              paddingRight: 21,
+            }}>
+            <Text style={{fontSize: 18, color: 'gray', textAlign: 'left'}}>
+              취소/반품
+            </Text>
+            <Text
+              style={{
+                fontSize: 27,
+                color: 'black',
+                marginLeft: 29,
+              }}>
               0
             </Text>
           </View>
@@ -93,6 +92,7 @@ const TopView = styled.View`
   justify-content: space-around;
   background-color: white;
   margin-top: 15px;
+  margin-left: 20px;
 `;
 
 const OrderInfoContainer = styled.View`

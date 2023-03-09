@@ -1,16 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Dimensions,
-  Text,
-  ScrollView,
-} from 'react-native';
+import {View, TouchableOpacity, Dimensions, Text} from 'react-native';
 import styled from 'styled-components/native';
 import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
@@ -28,9 +21,10 @@ function OrderItem({orderId, orderTime, orderItems, existingItems}) {
     thumbnailList,
     detailList,
   } = existingItems;
+  const {addRecentProduct} = useClothsRelatedActions();
   const {year, month, date, hours, minutes} = orderTime;
   const navigation = useNavigation();
-  const timestring = `${year}/${month}/${date} ${hours}:${minutes}`;
+  const timestring = `${year}.${month}.${date} ${hours}:${minutes}`;
 
   return (
     <Container>
@@ -49,7 +43,7 @@ function OrderItem({orderId, orderTime, orderItems, existingItems}) {
           width: Window_WIDTH,
         }}>
         <Text style={{fontSize: 20, fontWeight: 'bold', color: 'black'}}>
-          {brand} 배송상품
+          {year}.{month}.{date} {brand}
         </Text>
       </View>
       <BasketContainer>
@@ -66,8 +60,8 @@ function OrderItem({orderId, orderTime, orderItems, existingItems}) {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     width: Window_WIDTH * 0.9,
-                    marginLeft: 15,
-                    marginTop: 15,
+                    marginLeft: 2,
+                    marginTop: 12,
                   }}>
                   <View
                     style={{
@@ -100,15 +94,16 @@ function OrderItem({orderId, orderTime, orderItems, existingItems}) {
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                         }}>
-                        <Text>{timestring}</Text>
                         <ClothImage
                           height={150}
                           width={150}
                           thumbnailList={thumbnailList}
                         />
                         <View style={{paddingTop: 5}}>
+                          <PaymentDateText>
+                            결제 상세 날짜: {timestring}
+                          </PaymentDateText>
                           <BrandText>배송중</BrandText>
-                          <BrandText>{brand}</BrandText>
                           <PriceText>{stringPrice}</PriceText>
                           <NameText>{name}</NameText>
                           <OptionView>
@@ -161,12 +156,6 @@ const BasketContainer = styled.View`
   margin-top: 8px;
 `;
 
-const ClothView = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-`;
-
 const ClothItemWrapper = styled.View`
   padding-vertical: 4px;
 `;
@@ -196,20 +185,28 @@ const NameText = styled.Text`
 `;
 
 const BrandText = styled.Text`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   text-align: left;
   margin: 2px;
   margin-left: 8px;
-  color: gray;
+  color: red;
+`;
+
+const PaymentDateText = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 8px;
+  color: black;
 `;
 
 const OptionView = styled.View`
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 8px;
   margin-left: 8px;
-  height: 45px;
-  width: 160px;
+  height: 35px;
+  width: 210px;
   background-color: #e0e0e0;
   border-radius: 8px;
 `;
