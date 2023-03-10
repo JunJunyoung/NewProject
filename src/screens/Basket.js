@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {View, Text, TouchableOpacity, Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
@@ -6,6 +6,7 @@ import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import BasketItem from '../components/BasketItem';
 import {ScrollView} from 'react-native-gesture-handler';
 import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
@@ -13,33 +14,51 @@ const Basket = () => {
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
   const [checkboxState, setCheckboxState] = useState(false);
   const {isSelectedChangedProduct, addOrderProduct} = useClothsRelatedActions();
-  const allIsSelectedTrueProduct = basketProduct.map(item => {
-    const newOne = item.orderItems.map(c =>
-      c.isSelected === false ? {...c, isSelected: true} : c,
-    );
-    return {...item, orderItems: newOne};
-  });
-  const allIsSelectedFalseProduct = basketProduct.map(item => {
-    const newOne = item.orderItems.map(c =>
-      c.isSelected === true ? {...c, isSelected: false} : c,
-    );
-    return {...item, orderItems: newOne};
-  });
-  const SelectedItemsDeleteArr = basketProduct.filter(item => {
-    if (item.orderItems.every(c => c.isSelected === false) === true) {
-      return {item};
-    }
-  });
-  const SelectedItemsArr = basketProduct.filter(item => {
-    if (item.orderItems.every(c => c.isSelected === true) === true) {
-      return {item};
-    }
-  });
-  const idNameChangeSelectedItemsArr = SelectedItemsArr.map(
-    ({purchaseId: orderId, ...item}) => ({
-      orderId,
-      ...item,
-    }),
+  const allIsSelectedTrueProduct = useMemo(
+    () =>
+      basketProduct.map(item => {
+        const newOne = item.orderItems.map(c =>
+          c.isSelected === false ? {...c, isSelected: true} : c,
+        );
+        return {...item, orderItems: newOne};
+      }),
+    [basketProduct],
+  );
+  const allIsSelectedFalseProduct = useMemo(
+    () =>
+      basketProduct.map(item => {
+        const newOne = item.orderItems.map(c =>
+          c.isSelected === true ? {...c, isSelected: false} : c,
+        );
+        return {...item, orderItems: newOne};
+      }),
+    [basketProduct],
+  );
+  const SelectedItemsDeleteArr = useMemo(
+    () =>
+      basketProduct.filter(item => {
+        if (item.orderItems.every(c => c.isSelected === false) === true) {
+          return {item};
+        }
+      }),
+    [basketProduct],
+  );
+  const SelectedItemsArr = useMemo(
+    () =>
+      basketProduct.filter(item => {
+        if (item.orderItems.every(c => c.isSelected === true) === true) {
+          return {item};
+        }
+      }),
+    [basketProduct],
+  );
+  const idNameChangeSelectedItemsArr = useMemo(
+    () =>
+      SelectedItemsArr.map(({purchaseId: orderId, ...item}) => ({
+        orderId,
+        ...item,
+      })),
+    [SelectedItemsArr],
   );
   let today = new Date();
   let time = {
@@ -50,13 +69,35 @@ const Basket = () => {
     minutes: today.getMinutes(),
   };
 
-  const timeAddedroduct = idNameChangeSelectedItemsArr.map(item => ({
-    ...item,
-    orderTime: '',
-  }));
-  const orderProduct = timeAddedroduct.map(item => {
-    return {...item, orderTime: time};
-  });
+  const timeAddedroduct = useMemo(
+    () =>
+      idNameChangeSelectedItemsArr.map(item => ({
+        ...item,
+        orderTime: '',
+      })),
+    [idNameChangeSelectedItemsArr],
+  );
+  const orderProduct = useMemo(
+    () =>
+      timeAddedroduct.map(item => {
+        return {...item, orderTime: time};
+      }),
+    [timeAddedroduct],
+  );
+
+  useEffect(() => {
+    async function save() {
+      try {
+        await AsyncStorage.setItem(
+          'orderProduct',
+          JSON.stringify(orderProduct),
+        );
+      } catch (e) {
+        console.log('Fail to save orderProduct');
+      }
+    }
+    save();
+  }, [orderProduct]);
 
   const deleteIsSelected = () => {
     Alert.alert(

@@ -14,6 +14,7 @@ import {useSelector} from 'react-redux';
 import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 import Counter from './Counter';
 import Icon from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
@@ -29,11 +30,21 @@ const PurchaseModal = props => {
   const {addBasketProduct, addOverwriteBasketProduct} =
     useClothsRelatedActions();
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
-  const sameBasketProduct = basketProduct.find(
-    item => item.existingItems.contentId === contentId,
-  );
+  useEffect(() => {
+    async function save() {
+      try {
+        await AsyncStorage.setItem(
+          'basketProduct',
+          JSON.stringify(basketProduct),
+        );
+      } catch (e) {
+        console.log('Fail to save basketProduct');
+      }
+    }
+    save();
+  }, [basketProduct]);
   const clothList = useSelector(state => state.clothList.clothList);
-  const clickedClothList = clothList.find(item => item.contentId === contentId);
+  const clickedClothItem = clothList.find(item => item.contentId === contentId);
   const {
     name,
     explain,
@@ -45,7 +56,7 @@ const PurchaseModal = props => {
     isChecked,
     thumbnailList,
     detailList,
-  } = clickedClothList;
+  } = clickedClothItem;
   const screenHeight = Dimensions.get('screen').height;
   const panY = useRef(new Animated.Value(screenHeight)).current;
   const translateY = panY.interpolate({
@@ -92,55 +103,94 @@ const PurchaseModal = props => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
 
-  const sameOptionList = sameBasketProduct?.orderItems?.filter(item =>
-    optionList.filter(
-      o => o.orderColor === item.orderColor && o.orderSize === item.orderSize,
-    ),
+  // const sameContentDifferentColorProduct = sameBasketProduct.map(item => {
+  //   const newOrderItems = item.orderItems.map(c =>
+  //     c.orderColor !== optionList.find(e => e.orderColor)
+  //       ? {
+  //           ...c,
+  //           orderColor: optionList.find(i => i.orderColor !== item.orderColor)
+  //             .orderColor,
+  //         }
+  //       : c,
+  //   );
+  //   return {...item, orderItems: newOrderItems};
+  // });
+
+  // const sameContentsameColorDifferentSizeProduct = sameBasketProduct.map(
+  //   item => {
+  //     const newOrderItems = item.orderItems.map(c =>
+  //       c.orderColor === optionList.find(e => e.orderColor) &&
+  //       c.orderSize !== optionList.find(e => e.orderSize)
+  //         ? {
+  //             ...c,
+  //             orderColor: optionList.find(i => i.orderColor === item.orderColor)
+  //               .orderColor,
+  //           }
+  //         : c,
+  //     );
+  //     return {...item, orderItems: newOrderItems};
+  //   },
+  // );
+
+  const sameBasketProduct = basketProduct.find(
+    item => item.existingItems.contentId === contentId,
   );
 
-  const setValidator = () => {
-    const newOptionList = sameBasketProduct?.orderItems?.map(item =>
-      optionList.filter(
-        o => o.orderColor === item.orderColor && o.orderSize === item.orderSize,
-      ).length > 0
-        ? {
-            ...item,
-            quantity:
-              item.quantity +
-              //optionList의 컬러, 사이즈 동일한 객체의 quantity
-              optionList.find(
-                i =>
-                  i.orderColor === item.orderColor &&
-                  i.orderSize === item.orderSize,
-              ).quantity,
-          }
-        : item,
-    );
+  // const newOptionList = sameBasketProduct?.orderItems?.map(item =>
+  //   optionList.filter(o => o.orderColor === item.orderColor).length > 0
+  //     ? {
+  //         ...item,
+  //         quantity:
+  //           item.quantity +
+  //           optionList.find(
+  //             i =>
+  //               i.orderColor === item.orderColor &&
+  //               i.orderSize === item.orderSize,
+  //           )?.quantity,
+  //       }
+  //     : item,
+  // );
 
-    basketProduct.filter(item => item?.existingItems?.contentId === contentId)
-      ?.length === 0
-      ? (addBasketProduct({
-          optionList,
-          contentId,
-          name,
-          explain,
-          category,
-          brand,
-          color,
-          price,
-          size,
-          isChecked,
-          thumbnailList,
-          detailList,
-        }),
+  const setValidator = () => {
+    const test = basketProduct.find(
+      item => item?.existingItems?.contentId === contentId,
+    );
+    if (!test) {
+      addBasketProduct({
+        optionList,
+        clothItem: clickedClothItem,
+      }),
         setPurchaseVisible(false),
-        setOptionList([]))
-      : (addOverwriteBasketProduct({
-          newOptionList,
-          contentId,
-        }),
+        setOptionList([]);
+    } else {
+      let newOptionList = test.orderItems;
+      optionList.forEach(item => {
+        const matchedOption = newOptionList.find(
+          o =>
+            o.orderColor === item.orderColor && o.orderSize === item.orderSize,
+        );
+        if (matchedOption) {
+          const matchedIndex = newOptionList.findIndex(
+            o =>
+              o.orderColor === item.orderColor &&
+              o.orderSize === item.orderSize,
+          );
+          newOptionList = newOptionList.map((i, index) =>
+            index === matchedIndex
+              ? {...i, quantity: i.quantity + item.quantity}
+              : i,
+          );
+        } else {
+          newOptionList = [...newOptionList, item];
+        }
+      });
+      addOverwriteBasketProduct({
+        newOptionList,
+        contentId,
+      }),
         setPurchaseVisible(false),
-        setOptionList([]));
+        setOptionList([]);
+    }
   };
 
   const totalQuantity = optionList.reduce(
@@ -180,6 +230,7 @@ const PurchaseModal = props => {
                 style={{marginTop: 20}}
                 onPress={() => {
                   setOptionVisible(true);
+                  setPurchaseVisible(false);
                 }}>
                 <CloseText>옵션 선택하기</CloseText>
               </CloseButton>

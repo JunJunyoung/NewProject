@@ -28,41 +28,31 @@ function BottomBuyButton({isChecked, contentId, price}) {
           </WantButton>
         )}
       </View>
-      {optionList.length === 0 ? (
-        <BuyButton onPress={() => setOptionVisible(true)}>
-          <BuyText>구매하기</BuyText>
-          <SelectOptionModal
-            contentId={contentId}
-            nextId={nextId}
-            optionList={optionList}
-            setOptionList={setOptionList}
-            optionVisible={optionVisible}
-            setOptionVisible={setOptionVisible}
-            setPurchaseVisible={setPurchaseVisible}
-          />
-        </BuyButton>
-      ) : (
-        <BuyButton onPress={() => setPurchaseVisible(true)}>
-          <BuyText>구매하기</BuyText>
-          <PurchaseModal
-            contentId={contentId}
-            optionList={optionList}
-            setOptionList={setOptionList}
-            purchaseVisible={purchaseVisible}
-            setPurchaseVisible={setPurchaseVisible}
-            setOptionVisible={setOptionVisible}
-          />
-          <SelectOptionModal
-            contentId={contentId}
-            nextId={nextId}
-            optionList={optionList}
-            setOptionList={setOptionList}
-            optionVisible={optionVisible}
-            setOptionVisible={setOptionVisible}
-            setPurchaseVisible={setPurchaseVisible}
-          />
-        </BuyButton>
-      )}
+      <BuyButton
+        onPress={() => {
+          optionList.length === 0
+            ? setOptionVisible(true)
+            : setPurchaseVisible(true);
+        }}>
+        <BuyText>구매하기</BuyText>
+      </BuyButton>
+      <SelectOptionModal
+        contentId={contentId}
+        nextId={nextId}
+        optionList={optionList}
+        setOptionList={setOptionList}
+        optionVisible={optionVisible}
+        setOptionVisible={setOptionVisible}
+        setPurchaseVisible={setPurchaseVisible}
+      />
+      <PurchaseModal
+        contentId={contentId}
+        optionList={optionList}
+        setOptionList={setOptionList}
+        purchaseVisible={purchaseVisible}
+        setPurchaseVisible={setPurchaseVisible}
+        setOptionVisible={setOptionVisible}
+      />
     </BottomButtonView>
   );
 }

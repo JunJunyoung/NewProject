@@ -47,15 +47,12 @@ const Counter = ({
           marginRight: 12,
         }}>
         <View style={{flexDirection: 'row'}}>
-          {quantity > 1 ? (
-            <CounterButton onPress={onDecrease} color="white">
-              <Icon name="minus" size={30} color="#606060" />
-            </CounterButton>
-          ) : (
-            <CounterButton color="gray" disabled={false}>
-              <Icon name="minus" size={30} color="#606060" />
-            </CounterButton>
-          )}
+          <CounterButton
+            onPress={quantity > 1 ? onDecrease : null}
+            disabled={quantity > 1 ? false : true}
+            color="white">
+            <Icon name="minus" size={30} color="#606060" />
+          </CounterButton>
           <Text
             style={{
               color: 'black',

@@ -44,6 +44,7 @@ const SelectOptionModal = props => {
   const processedSize = size.map((item, label) =>
     item.count === 0 ? {...item, disabled: true} : {...item, disabled: false},
   );
+  //스토리지에서 간단하게 받아, 이후에 가공하도록 수정
 
   const screenHeight = Dimensions.get('screen').height;
   const panY = useRef(new Animated.Value(screenHeight)).current;
@@ -107,11 +108,15 @@ const SelectOptionModal = props => {
     setColorOpen(false);
   }, []);
 
-  const setValidator = () => {
-    optionList.filter(
-      item => item.orderColor === colorValue && item.orderSize === sizeValue,
-    ).length === 0
-      ? (setOptionList([
+  useEffect(() => {
+    const setValidator = () => {
+      if (
+        optionList.filter(
+          item =>
+            item.orderColor === colorValue && item.orderSize === sizeValue,
+        ).length === 0
+      ) {
+        setOptionList([
           ...optionList,
           {
             orderId: nextId.current,
@@ -122,24 +127,28 @@ const SelectOptionModal = props => {
             remainInventory: size.find(item => item.value === sizeValue).count,
             isSelected: false,
           },
-        ]),
-        setColorValue(null),
-        setSizeValue(null),
-        setOptionVisible(false),
-        setPurchaseVisible(true),
-        (nextId.current += 1))
-      : (setOptionList(
+        ]);
+        setOptionVisible(false);
+        setPurchaseVisible(true);
+        setColorValue(null);
+        setSizeValue(null);
+        nextId.current += 1;
+      } else {
+        setOptionList(
           optionList.map(item =>
             item.orderColor === colorValue && item.orderSize === sizeValue
               ? {...item, quantity: item.quantity + 1}
               : item,
           ),
-        ),
-        setColorValue(null),
-        setSizeValue(null),
-        setOptionVisible(false),
-        setPurchaseVisible(true));
-  };
+        );
+        setOptionVisible(false);
+        setPurchaseVisible(true);
+        setColorValue(null);
+        setSizeValue(null);
+      }
+    };
+    if (colorValue && sizeValue) setValidator();
+  }, [colorValue, sizeValue]);
 
   return (
     <Modal
@@ -151,7 +160,7 @@ const SelectOptionModal = props => {
         <TouchableWithoutFeedback onPress={() => setOptionVisible(false)}>
           <View style={{flex: 1}} />
         </TouchableWithoutFeedback>
-        {colorValue === null || sizeValue === null ? (
+        {(!colorValue || !sizeValue) && (
           <Animated.View
             style={{
               height: 500,
@@ -192,46 +201,34 @@ const SelectOptionModal = props => {
               />
             </View>
             <View style={{marginTop: 5}}>
-              {colorValue === null ? (
-                <View style={{height: 80, width: Window_WIDTH * 0.95}}>
-                  <InactiveSizeView
-                    onPress={() =>
-                      Alert.alert('상위 옵션을 먼저 선택해주세요')
-                    }>
-                    <View style={{marginLeft: 10}}>
-                      <Text style={{fontSize: 16}}>사이즈 선택하기</Text>
-                    </View>
-                    <View style={{marginRight: 11}}>
-                      <Icon name="chevron-thin-down" size={15} color="black" />
-                    </View>
-                  </InactiveSizeView>
-                </View>
-              ) : (
-                <SizeDropDownPicker
-                  style={{borderColor: '#c0c0c0'}}
-                  open={sizeOpen}
-                  value={sizeValue}
-                  items={sizeItems}
-                  setOpen={setSizeOpen}
-                  setValue={setSizeValue}
-                  setItems={setSizeItems}
-                  placeholder="사이즈 선택하기"
-                  placeholderStyle={{color: '#808080'}}
-                  containerStyle={{height: 180, width: '95%'}}
-                  textStyle={{fontSize: 16}}
-                  labelStyle={{
-                    fontSize: 16,
-                  }}
-                  disabledItemLabelStyle={{
-                    opacity: 0.7,
-                    color: 'gray',
-                    textDecorationLine: 'line-through',
-                  }}
-                  onOpen={onSizeOpen}
-                  zIndex={1000}
-                  listMode="SCROLLVIEW"
-                />
-              )}
+              <SizeDropDownPicker
+                style={{borderColor: '#c0c0c0'}}
+                open={sizeOpen}
+                value={sizeValue}
+                items={sizeItems}
+                setOpen={open => {
+                  if (open && !colorValue)
+                    Alert.alert('상위 옵션을 먼저 선택해주세요');
+                  else setSizeOpen(open);
+                }}
+                setValue={setSizeValue}
+                setItems={setSizeItems}
+                placeholder="사이즈 선택하기"
+                placeholderStyle={{color: '#808080'}}
+                containerStyle={{height: 180, width: '95%'}}
+                textStyle={{fontSize: 16}}
+                labelStyle={{
+                  fontSize: 16,
+                }}
+                disabledItemLabelStyle={{
+                  opacity: 0.7,
+                  color: 'gray',
+                  textDecorationLine: 'line-through',
+                }}
+                onOpen={onSizeOpen}
+                zIndex={1000}
+                listMode="SCROLLVIEW"
+              />
             </View>
             <View
               style={{
@@ -248,8 +245,6 @@ const SelectOptionModal = props => {
               </CloseButton>
             </BottomOptionView>
           </Animated.View>
-        ) : (
-          setValidator()
         )}
       </OverlayView>
     </Modal>

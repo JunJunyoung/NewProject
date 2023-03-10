@@ -1,21 +1,23 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+export interface clothItem {
+  contentId: number;
+  name: string;
+  explain: string;
+  category: string;
+  brand: string;
+  color: [];
+  price: number;
+  size: [];
+  isChecked: boolean;
+  thumbnailList: [];
+  detailList: [];
+}
+
 export interface basketProduct {
   purchaseId: number;
   orderItems: [];
-  existingItems: {
-    contentId: number;
-    name: string;
-    explain: string;
-    category: string;
-    brand: string;
-    color: [];
-    price: number;
-    size: [];
-    isChecked: boolean;
-    thumbnailList: [];
-    detailList: [];
-  };
+  existingItems: clothItem;
 }
 
 const initialState: basketProduct[] = [];
@@ -28,37 +30,15 @@ export const basketProductsSlice = createSlice({
     addBasketProduct: (
       state,
       action: PayloadAction<{
-        purchaseId: number;
         optionList: [];
-        contentId: number;
-        name: string;
-        explain: string;
-        category: string;
-        brand: string;
-        color: [];
-        price: number;
-        size: [];
-        isChecked: boolean;
-        thumbnailList: [];
-        detailList: [];
+        clothItem: clothItem;
       }>,
     ) => {
+      const {optionList, clothItem} = action.payload;
       state.basketProduct.push({
         purchaseId: nextId,
-        orderItems: action.payload.optionList,
-        existingItems: {
-          contentId: action.payload.contentId,
-          name: action.payload.name,
-          explain: action.payload.explain,
-          category: action.payload.category,
-          brand: action.payload.brand,
-          color: action.payload.color,
-          price: action.payload.price,
-          size: action.payload.size,
-          isChecked: action.payload.isChecked,
-          thumbnailList: action.payload.thumbnailList,
-          detailList: action.payload.detailList,
-        },
+        orderItems: optionList,
+        existingItems: clothItem,
       });
       nextId += 1;
     },
