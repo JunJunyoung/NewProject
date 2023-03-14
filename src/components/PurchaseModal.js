@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   PanResponder,
+  Alert,
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
@@ -45,18 +46,8 @@ const PurchaseModal = props => {
   }, [basketProduct]);
   const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothItem = clothList.find(item => item.contentId === contentId);
-  const {
-    name,
-    explain,
-    category,
-    brand,
-    color,
-    price,
-    size,
-    isChecked,
-    thumbnailList,
-    detailList,
-  } = clickedClothItem;
+  const {price, size} = clickedClothItem;
+  const orderProduct = useSelector(state => state.orderProduct.orderProduct);
   const screenHeight = Dimensions.get('screen').height;
   const panY = useRef(new Animated.Value(screenHeight)).current;
   const translateY = panY.interpolate({
@@ -103,53 +94,68 @@ const PurchaseModal = props => {
     closePurchaseModal.start(() => setPurchaseVisible(false));
   };
 
-  // const sameContentDifferentColorProduct = sameBasketProduct.map(item => {
-  //   const newOrderItems = item.orderItems.map(c =>
-  //     c.orderColor !== optionList.find(e => e.orderColor)
-  //       ? {
-  //           ...c,
-  //           orderColor: optionList.find(i => i.orderColor !== item.orderColor)
-  //             .orderColor,
-  //         }
-  //       : c,
-  //   );
-  //   return {...item, orderItems: newOrderItems};
-  // });
+  const optionAddedSizeObj = optionList?.find(item => {
+    const test = orderProduct.find(a => {
+      const condition = a.orderItems.find(
+        b => b.orderColor === item.orderColor && b.orderSize === item.orderSize,
+      );
+      if (condition) {
+        return a;
+      } else {
+        return null;
+      }
+    });
+    const depth = test?.orderItems?.find(
+      e => e.orderColor === item.orderColor && e.orderSize === item.orderSize,
+    );
+    if (
+      depth?.orderColor === item.orderColor &&
+      depth?.orderSize === item.orderSize
+    ) {
+      return item;
+    }
+  });
 
-  // const sameContentsameColorDifferentSizeProduct = sameBasketProduct.map(
-  //   item => {
-  //     const newOrderItems = item.orderItems.map(c =>
-  //       c.orderColor === optionList.find(e => e.orderColor) &&
-  //       c.orderSize !== optionList.find(e => e.orderSize)
-  //         ? {
-  //             ...c,
-  //             orderColor: optionList.find(i => i.orderColor === item.orderColor)
-  //               .orderColor,
-  //           }
-  //         : c,
-  //     );
-  //     return {...item, orderItems: newOrderItems};
-  //   },
-  // );
-
-  const sameBasketProduct = basketProduct.find(
-    item => item.existingItems.contentId === contentId,
+  const selectedOrderProductSizeArr = orderProduct?.find(item =>
+    optionList.find(c => {
+      const condition = item.orderItems.find(
+        d => d.orderColor === c.orderColor && d.orderSize === c.orderSize,
+      );
+      if (condition) {
+        return c;
+      } else {
+        return null;
+      }
+    }),
   );
 
-  // const newOptionList = sameBasketProduct?.orderItems?.map(item =>
-  //   optionList.filter(o => o.orderColor === item.orderColor).length > 0
-  //     ? {
-  //         ...item,
-  //         quantity:
-  //           item.quantity +
-  //           optionList.find(
-  //             i =>
-  //               i.orderColor === item.orderColor &&
-  //               i.orderSize === item.orderSize,
-  //           )?.quantity,
-  //       }
-  //     : item,
-  // );
+  const selectedOrderProductSizeObj =
+    selectedOrderProductSizeArr?.orderItems?.find(item => {
+      const test = optionList.find(
+        j => j.orderColor === item.orderColor && j.orderSize === item.orderSize,
+      );
+      if (test) {
+        return item;
+      } else {
+        return null;
+      }
+    });
+
+  const remainCountObj = size.find(item => {
+    const test = optionList.find(g => g.orderSize === item.label);
+    if (test) {
+      return item;
+    } else {
+      return null;
+    }
+  });
+
+  console.log('optionAddedSizeObj.quantity>>>', optionAddedSizeObj?.quantity);
+  console.log(
+    'selectedOrderProductSizeObj?.quantity>>>',
+    selectedOrderProductSizeObj?.quantity,
+  );
+  console.log('remainCountObj?.count>>>', remainCountObj?.count);
 
   const setValidator = () => {
     const test = basketProduct.find(
@@ -163,33 +169,41 @@ const PurchaseModal = props => {
         setPurchaseVisible(false),
         setOptionList([]);
     } else {
-      let newOptionList = test.orderItems;
-      optionList.forEach(item => {
-        const matchedOption = newOptionList.find(
-          o =>
-            o.orderColor === item.orderColor && o.orderSize === item.orderSize,
-        );
-        if (matchedOption) {
-          const matchedIndex = newOptionList.findIndex(
+      if (
+        optionAddedSizeObj?.quantity + selectedOrderProductSizeObj?.quantity >
+        remainCountObj?.count
+      ) {
+        Alert.alert('죄송합니다. 재고가 모두 소진되었습니다.');
+      } else {
+        let newOptionList = test.orderItems;
+        optionList.forEach(item => {
+          const matchedOption = newOptionList.find(
             o =>
               o.orderColor === item.orderColor &&
               o.orderSize === item.orderSize,
           );
-          newOptionList = newOptionList.map((i, index) =>
-            index === matchedIndex
-              ? {...i, quantity: i.quantity + item.quantity}
-              : i,
-          );
-        } else {
-          newOptionList = [...newOptionList, item];
-        }
-      });
-      addOverwriteBasketProduct({
-        newOptionList,
-        contentId,
-      }),
-        setPurchaseVisible(false),
-        setOptionList([]);
+          if (matchedOption) {
+            const matchedIndex = newOptionList.findIndex(
+              o =>
+                o.orderColor === item.orderColor &&
+                o.orderSize === item.orderSize,
+            );
+            newOptionList = newOptionList.map((i, index) =>
+              index === matchedIndex
+                ? {...i, quantity: i.quantity + item.quantity}
+                : i,
+            );
+          } else {
+            newOptionList = [...newOptionList, item];
+          }
+        });
+        addOverwriteBasketProduct({
+          newOptionList,
+          contentId,
+        }),
+          setPurchaseVisible(false),
+          setOptionList([]);
+      }
     }
   };
 

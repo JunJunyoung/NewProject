@@ -50,7 +50,7 @@ const DetailPageHeader = ({contentId, price, pointerEvents}) => {
 };
 
 const Container = styled.View`
-  height: 302px;
+  height: 580px;
   width: 100%;
   background-color: #f7f7f7f7;
 `;

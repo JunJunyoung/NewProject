@@ -1,188 +1,87 @@
-import React, {useState, useCallback, useRef, useEffect} from 'react';
-import {View, Animated, TouchableOpacity, Text} from 'react-native';
-import {TabView} from 'react-native-tab-view';
+import React, {useState, useEffect} from 'react';
+import {View, ScrollView, Text, Dimensions, Image} from 'react-native';
 import DetailPageHeader from './DetailPageHeader';
-import CollapsibleFlatList from '../components/CollapsibleFlatList';
 import styled from 'styled-components/native';
 import BottomBuyButton from '../components/BottomBuyButton';
+import FastImage from 'react-native-fast-image';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const TABBAR_HEIGHT = 100;
+const Window_WIDTH = Dimensions.get('window').width;
 
 function DetailScreen({route}) {
-  const {contentId, price, isChecked} = route.params;
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const [tabRoutes, setTabRoutes] = useState([
-    {key: 'first', title: '상품정보'},
-    {key: 'second', title: '리뷰'},
-    {key: 'third', title: '문의'},
-  ]);
-  const [tabIndex, setTabIndex] = useState(0);
-  const tabIndexRef = useRef(0);
-  const isListGlidingRef = useRef(false);
-  const listArrRef = useRef([]);
-  const listOffsetRef = useRef({});
+  const {contentId, price, detailList, isChecked} = route.params;
+  const [isVisibleMore, setIsVisibleMore] = useState(false);
+  const deletedDetailList = detailList.filter(item => item.detailID !== 1);
+  const [size, setSize] = useState({width: 0, height: 0});
 
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const headerTranslateY = scrollY.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: [0, -headerHeight],
-    extrapolate: 'clamp',
-  });
-
-  const tabBarTranslateY = scrollY.interpolate({
-    inputRange: [0, headerHeight],
-    outputRange: [headerHeight, 0],
-    extrapolateRight: 'clamp',
-  });
-
-  useEffect(() => {
-    scrollY.addListener(({value}) => {});
-
-    return () => {
-      scrollY.removeListener();
-    };
-  }, []);
-
-  const headerOnLayout = useCallback(event => {
-    const {height} = event.nativeEvent.layout;
-    setHeaderHeight(height);
-  }, []);
-
-  const onTabIndexChange = useCallback(id => {
-    setTabIndex(id);
-    tabIndexRef.current = id;
-  }, []);
-
-  const onTabPress = useCallback(idx => {
-    if (!isListGlidingRef.current) {
-      setTabIndex(idx);
-      tabIndexRef.current = idx;
-    }
-  }, []);
-
-  const syncScrollOffset = () => {
-    const focusedTabKey = tabRoutes[tabIndexRef.current].key;
-
-    listArrRef.current.forEach(item => {
-      if (item.key !== focusedTabKey) {
-        if (scrollY._value < headerHeight && scrollY._value >= 0) {
-          if (item.value) {
-            item.value.scrollToOffset({
-              offset: scrollY._value,
-              animated: false,
-            });
-            listOffsetRef.current[item.key] = scrollY._value;
-          }
-        } else if (scrollY._value >= headerHeight) {
-          if (
-            listOffsetRef.current[item.key] < headerHeight ||
-            listOffsetRef.current[item.key] === null
-          ) {
-            if (item.value) {
-              item.value.scrollToOffset({
-                offset: headerHeight,
-                animated: false,
-              });
-              listOffsetRef.current[item.key] = headerHeight;
-            }
-          }
-        }
-      } else {
-        if (item.value) {
-          listOffsetRef.current[item.key] = scrollY._value;
-        }
-      }
-    });
-  };
-
-  const onMomentumScrollBegin = useCallback(() => {
-    isListGlidingRef.current = true;
-  }, []);
-  const onMomentumScrollEnd = useCallback(() => {
-    isListGlidingRef.current = false;
-    syncScrollOffset();
-  }, [headerHeight]);
-  const onScrollEndDrag = useCallback(() => {
-    syncScrollOffset();
-  }, [headerHeight]);
-
-  const renderTabBar = useCallback(
-    props => {
-      return (
-        <Animated.View
-          style={[
-            {
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: TABBAR_HEIGHT,
-              backgroundColor: '#FFFFFF',
-              zIndex: 1,
-            },
-            {transform: [{translateY: tabBarTranslateY}]},
-          ]}>
-          {props.navigationState.routes.map((route, idx) => {
-            return (
-              <TouchableOpacity
-                style={{flex: 1}}
-                key={idx}
-                onPress={() => {
-                  onTabPress(idx);
-                }}>
-                <CollapsibleTabBarLabelContainer>
-                  <CollapsibleTabBarLabelText>
-                    {route.title}
-                  </CollapsibleTabBarLabelText>
-                </CollapsibleTabBarLabelContainer>
-              </TouchableOpacity>
-            );
-          })}
-        </Animated.View>
-      );
-    },
-    [headerHeight],
-  );
-
-  const renderScene = useCallback(
-    ({route}) => {
-      const isFocused = route.key === tabRoutes[tabIndex].key;
-      return (
-        <CollapsibleFlatList
-          contentId={contentId}
-          headerHeight={headerHeight}
-          tabBarHeight={TABBAR_HEIGHT}
-          scrollY={scrollY}
-          onMomentumScrollBegin={onMomentumScrollBegin}
-          onMomentumScrollEnd={onMomentumScrollEnd}
-          onScrollEndDrag={onScrollEndDrag}
-          tabRoute={route}
-          listArrRef={listArrRef}
-          isTabFocused={isFocused}
-        />
-      );
-    },
-    [headerHeight, tabIndex],
-  );
+  // useEffect(() => {
+  //   Image.getSize(uri, (w, h) => {
+  //     setSize({
+  //       width: Window_WIDTH,
+  //       height: h / (w / Window_WIDTH),
+  //     });
+  //   });
+  // }, []);
 
   return (
     <RootContainer>
-      {headerHeight > 0 ? (
-        <TabView
-          navigationState={{index: tabIndex, routes: tabRoutes}}
-          renderScene={renderScene}
-          renderTabBar={renderTabBar}
-          onIndexChange={onTabIndexChange}
-        />
-      ) : null}
-      <Animated.View
-        style={{
-          position: 'absolute',
-          width: '100%',
-          transform: [{translateY: headerTranslateY}],
-        }}
-        onLayout={headerOnLayout}
-        pointerEvents="box-none">
+      <ScrollView>
         <DetailPageHeader contentId={contentId} price={price} />
-      </Animated.View>
+        <View>
+          <FastImage
+            style={{width: Window_WIDTH, height: 4080}}
+            justifyContent="center"
+            source={{
+              uri: detailList.find(item => item.detailID === 1).uri,
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.contain}
+          />
+        </View>
+        {isVisibleMore === false ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginTop: 10,
+              height: 100,
+            }}>
+            <MoreBtn
+              onPress={() => {
+                setIsVisibleMore(true);
+              }}>
+              <MoreText>상품 정보 펼쳐보기</MoreText>
+              <Icon name="expand-more" size={25} color="#0066cc" />
+            </MoreBtn>
+          </View>
+        ) : (
+          deletedDetailList.map((item, idx) => {
+            const {uri} = item;
+            return (
+              <ClothItemWrapper key={idx}>
+                <View>
+                  <FastImage
+                    style={{
+                      height: 2400,
+                      width: Window_WIDTH,
+                    }}
+                    justifyContent="center"
+                    source={{
+                      uri,
+                      headers: {Authorization: 'someAuthToken'},
+                      priority: FastImage.priority.normal,
+                    }}
+                    resizeMode={FastImage.resizeMode.stretch}
+                  />
+                </View>
+              </ClothItemWrapper>
+            );
+          })
+        )}
+      </ScrollView>
+      <View style={{height: 80}}></View>
       <View
         style={{
           textAlign: 'center',
@@ -207,28 +106,35 @@ function DetailScreen({route}) {
           backgroundColor: '#E0E0E0',
         }}
       />
-      <BottomBuyButton
-        isChecked={route.params.isChecked}
-        contentId={route.params.contentId}
-      />
+      <BottomBuyButton isChecked={isChecked} contentId={contentId} />
     </RootContainer>
   );
 }
 
 const RootContainer = styled.View`
   flex: 1;
+  background-color: white;
 `;
 
-const CollapsibleTabBarLabelContainer = styled.View`
+const ClothItemWrapper = styled.View``;
+
+const MoreBtn = styled.TouchableOpacity`
+  background-color: white;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 55px;
+  width: 310px;
+  border-radius: 7px;
+  border-width: 1px;
+  border-color: #0066cc;
 `;
 
-const CollapsibleTabBarLabelText = styled.Text`
-  font-size: 17;
+const MoreText = styled.Text`
+  font-size: 16px;
   font-weight: bold;
-  color: black;
+  color: #0066cc;
+  padding-bottom: 7px;
 `;
 
 export default DetailScreen;

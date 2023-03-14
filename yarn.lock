@@ -6183,13 +6183,6 @@ react-native-tab-view-viewpager-adapter@^1.1.0:
   resolved "https://registry.npmjs.org/react-native-tab-view-viewpager-adapter/-/react-native-tab-view-viewpager-adapter-1.1.0.tgz"
   integrity sha512-KLKw+Ay41xAl5F2eRscJd7DHN8JLx06E2lTQJrYAxtBcNKDKfrcYC3wmq7t72DAOBe/6niF0h44c/t/D/AoXsA==
 
-react-native-tab-view@^3.3.4:
-  version "3.3.4"
-  resolved "https://registry.npmjs.org/react-native-tab-view/-/react-native-tab-view-3.3.4.tgz"
-  integrity sha512-rceAYWpHa6knA7tsTnnjlcOxlCErR4F+yXQPpNm125IvYFyv09YRhE5uMU2IzyPIQ1CJvADCHurF3KySzVI+4Q==
-  dependencies:
-    use-latest-callback "^0.1.5"
-
 react-native-vector-icons@^9.2.0:
   version "9.2.0"
   resolved "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-9.2.0.tgz"

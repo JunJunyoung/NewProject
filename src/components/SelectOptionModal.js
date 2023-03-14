@@ -1,8 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
-  ScrollView,
-  Text,
   Modal,
   Animated,
   TouchableWithoutFeedback,
@@ -13,7 +11,6 @@ import {
 import styled from 'styled-components/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useSelector} from 'react-redux';
-import Icon from 'react-native-vector-icons/Entypo';
 
 const Window_WIDTH = Dimensions.get('window').width;
 
@@ -29,22 +26,10 @@ const SelectOptionModal = props => {
   } = props;
   const clothList = useSelector(state => state.clothList.clothList);
   const clickedClothList = clothList.find(item => item.contentId === contentId);
-  const {
-    name,
-    explain,
-    category,
-    brand,
-    color,
-    price,
-    size,
-    isChecked,
-    thumbnailList,
-    detailList,
-  } = clickedClothList;
+  const {color, price, size} = clickedClothList;
   const processedSize = size.map((item, label) =>
     item.count === 0 ? {...item, disabled: true} : {...item, disabled: false},
   );
-  //스토리지에서 간단하게 받아, 이후에 가공하도록 수정
 
   const screenHeight = Dimensions.get('screen').height;
   const panY = useRef(new Animated.Value(screenHeight)).current;
@@ -195,7 +180,6 @@ const SelectOptionModal = props => {
                   fontSize: 16,
                 }}
                 onOpen={onColorOpen}
-                // onChangeValue={onChange}
                 zIndex={500}
                 listMode="SCROLLVIEW"
               />

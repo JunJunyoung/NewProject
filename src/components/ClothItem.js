@@ -38,6 +38,7 @@ function ClothItem({
           navigation.navigate('DetailScreen', {
             contentId,
             price,
+            detailList,
             isChecked,
           });
           addRecentProduct({

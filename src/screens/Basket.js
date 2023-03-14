@@ -11,6 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Window_WIDTH = Dimensions.get('window').width;
 
 const Basket = () => {
+  const orderedProduct = useSelector(state => state.orderProduct.orderProduct);
+  const clothList = useSelector(state => state.clothList.clothList);
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
   const [checkboxState, setCheckboxState] = useState(false);
   const {isSelectedChangedProduct, addOrderProduct} = useClothsRelatedActions();
@@ -120,17 +122,105 @@ const Basket = () => {
     );
   };
 
-  const purchaseCompleted = () => {
-    Alert.alert(
-      '주문 완료',
-      '주문이 완료되었습니다.',
-      [{text: '계속 쇼핑하기', onPress: () => {}, style: 'cancel'}],
-      {
-        cancelable: false,
-      },
+  const sameOrderProductItem = orderedProduct?.find(item => {
+    const sameSelectedItemsArr = SelectedItemsArr?.filter(
+      c => c.existingItems.contentId === item.existingItems.contentId,
     );
-    addOrderProduct(orderProduct);
-    isSelectedChangedProduct(SelectedItemsDeleteArr);
+    if (sameSelectedItemsArr) {
+      return item;
+    } else {
+      null;
+    }
+  });
+
+  const sameClothListItems = clothList.filter(item => {
+    const test =
+      sameOrderProductItem?.existingItems?.contentId === item.contentId;
+    if (test) {
+      return item;
+    } else {
+      null;
+    }
+  });
+
+  const sameOrderProductAndClothListObj =
+    sameOrderProductItem?.orderItems?.find(item => {
+      const test1 = sameClothListItems.find(e => {
+        const depth = e.color.find(f => f.label === item.orderColor);
+        if (depth) {
+          return e;
+        }
+      });
+      const test2 = sameClothListItems.find(r => {
+        const depths = r.size.find(g => g.label === item.orderSize);
+        if (depths) {
+          return r;
+        }
+      });
+      if (test1 && test2) {
+        return item;
+      }
+    });
+
+  const SelectedOrderItems = SelectedItemsArr?.find(item => {
+    const e = item?.orderItems?.find(
+      e =>
+        e?.orderColor === sameOrderProductAndClothListObj?.orderColor &&
+        e?.orderSize === sameOrderProductAndClothListObj?.orderSize,
+    );
+    if (e) {
+      return item;
+    }
+  });
+
+  const SelectedOrderItemObj = SelectedOrderItems?.orderItems?.find(
+    item =>
+      item.orderColor === sameOrderProductAndClothListObj.orderColor &&
+      item.orderSize === sameOrderProductAndClothListObj.orderSize,
+  );
+
+  const sameClothListItemsObj = sameClothListItems.find(item => {
+    const condition1 = item.color.find(
+      f => f.label === sameOrderProductAndClothListObj.orderColor,
+    );
+    const condition2 = item.size.find(
+      g => g.label === sameOrderProductAndClothListObj.orderSize,
+    );
+    if (condition1 && condition2) {
+      return item;
+    }
+  });
+
+  const sameClothListItemsCountObj = sameClothListItemsObj?.size?.find(item =>
+    item.label === SelectedOrderItemObj?.orderSize ? item.count : null,
+  );
+
+  console.log(
+    'sameOrderProductAndClothListObj>>>',
+    sameOrderProductAndClothListObj,
+  );
+  console.log('SelectedOrderItemObj>>>', SelectedOrderItemObj);
+  console.log('sameClothListItemsCountObj>>>', sameClothListItemsCountObj);
+
+  const purchaseCompleted = () => {
+    if (
+      sameOrderProductAndClothListObj?.quantity +
+        SelectedOrderItemObj?.quantity >
+      sameClothListItemsCountObj?.count
+    ) {
+      Alert.alert('죄송합니다. 재고가 부족합니다.');
+    } else {
+      Alert.alert(
+        '주문 완료',
+        '주문이 완료되었습니다.',
+        [{text: '계속 쇼핑하기', onPress: () => {}, style: 'cancel'}],
+        {
+          cancelable: false,
+        },
+      );
+      addOrderProduct(orderProduct);
+      isSelectedChangedProduct(SelectedItemsDeleteArr);
+    }
   };
 
   const IsSelectedProduct = basketProduct.filter(

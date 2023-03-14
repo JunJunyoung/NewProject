@@ -37,8 +37,6 @@
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.19.0",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-tab-view": "^3.3.4",
-    "react-native-tab-view-viewpager-adapter": "^1.1.0",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.5",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",

@@ -47,10 +47,6 @@
       },
       {
         "detailID": 4,
-        "uri": "https://gaenso.cdn.smart-img.com/image/DA/DA-2089/two2_01.jpg"
-      },
-      {
-        "detailID": 5,
         "uri": "https://gaenso.cdn.smart-img.com/image/DA/DA-2089/detail-4.jpg"
       }
     ]
@@ -484,19 +480,19 @@
     ],
     "detailList": [
       {
-        "thumbnailID": 1,
+        "detailID": 1,
         "uri": "https://gaenso.cdn.smart-img.com/image/DA/DA-2153/da2153_front_spraing.jpg"
       },
       {
-        "thumbnailID": 2,
+        "detailID": 2,
         "uri": "https://gaenso.cdn.smart-img.com/image/DA/DA-2153/two_07.jpg"
       },
       {
-        "thumbnailID": 3,
+        "detailID": 3,
         "uri": "https://gaenso.cdn.smart-img.com/image/DA/DA-2153/two1_06.jpg"
       },
       {
-        "thumbnailID": 4,
+        "detailID": 4,
         "uri": "https://gaenso.cdn.smart-img.com/image/DA/DA-2153/detail-4.jpg"
       }
     ]
