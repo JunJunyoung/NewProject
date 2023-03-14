@@ -11,6 +11,10 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["*"]
+    },
     "skipLibCheck": true
   },
   "exclude": [

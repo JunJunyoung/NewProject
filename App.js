@@ -1,136 +1,110 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Home from './src/screens/Home';
-import Profile from './src/screens/Profile';
-import Want from './src/screens/Want';
-import Basket from './src/components/Basket';
-
-const Tab = createBottomTabNavigator();
-
-const HomeTab = ({navigation}) => (
-  <Tab.Navigator initialRouteName="YLBA">
-    <Tab.Screen
-      name="찜"
-      component={Want}
-      options={{
-        tabBarShowLabel: false,
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: 'bold',
-        },
-        tabBarIcon: ({focused}) =>
-          focused ? (
-            <Icon size={30} name="heart" color="#FF6666" />
-          ) : (
-            <Icon size={30} name="heart" color="gray" />
-          ),
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Basket')}
-            style={{fontSize: 25, marginRight: 10}}>
-            <Text>장바구니</Text>
-          </TouchableOpacity>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="YLBA"
-      component={Home}
-      options={{
-        tabBarShowLabel: false,
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 24,
-          fontWeight: 'bold',
-        },
-        tabBarIcon: ({focused}) =>
-          focused ? (
-            <Icon
-              size={30}
-              name="home"
-              color="#FF6666"
-              backgroundColor="white"
-            />
-          ) : (
-            <Icon size={30} name="home" color="gray" />
-          ),
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Basket')}
-            style={{fontSize: 25, marginRight: 10}}>
-            <Text>장바구니</Text>
-          </TouchableOpacity>
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="마이페이지"
-      component={Profile}
-      options={{
-        tabBarShowLabel: false,
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: 'bold',
-        },
-        tabBarIcon: ({focused}) =>
-          focused ? (
-            <Icon size={30} name="account" color="#FF6666" />
-          ) : (
-            <Icon size={30} name="account" color="gray" />
-          ),
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Basket')}
-            style={{fontSize: 25, marginRight: 10}}>
-            <Text>장바구니</Text>
-          </TouchableOpacity>
-        ),
-      }}
-    />
-  </Tab.Navigator>
-);
+import Basket from './src/screens/Basket';
+import Order from './src/screens/Order';
+import HomeTab from './src/navigation/customTabNavi';
+import DetailScreen from './src/screens/DetailScreen';
+import {store} from './src/redux/store';
+import {Provider} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import useClothsRelatedActions from './src/hooks/useClothsRelatedActions';
 
 const Stack = createStackNavigator();
 
 const App = () => {
+  // const {addBasketProduct, addOrderProduct} = useClothsRelatedActions();
+
+  // useEffect(() => {
+  //   async function load() {
+  //     try {
+  //       const rawBasketProduct = await AsyncStorage.getItem('basketProduct');
+  //       const savedBasketProduct = JSON.parse(rawBasketProduct);
+  //       addBasketProduct(savedBasketProduct);
+  //     } catch (e) {
+  //       console.log('Failed to load basketProduct');
+  //     }
+  //   }
+  //   load();
+  // }, []);
+
+  // useEffect(() => {
+  //   async function load() {
+  //     try {
+  //       const rawOrderProduct = await AsyncStorage.getItem('orderProduct');
+  //       const savedOrderProduct = JSON.parse(rawOrderProduct);
+  //       addOrderProduct(savedOrderProduct);
+  //     } catch (e) {
+  //       console.log('Failed to load orderProduct');
+  //     }
+  //   }
+  //   load();
+  // }, []);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: '#FF6666',
-          tabBarShowLabel: false,
-        }}>
-        <Stack.Screen
-          name="Home"
-          component={HomeTab}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Basket"
-          component={Basket}
-          options={{
-            tabBarStyle: {display: 'none'},
-            title: '장바구니',
-            headerShown: true,
-            headerTitleStyle: {
-              fontSize: 20,
-              fontWeight: 'bold',
-              textAlign: 'center',
-            },
-            headerTitleAlign: 'center',
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: '#FF6666',
+            tabBarShowLabel: false,
+          }}>
+          <Stack.Screen
+            name="Home"
+            component={HomeTab}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Basket"
+            component={Basket}
+            options={{
+              tabBarStyle: {display: 'none'},
+              title: '장바구니',
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              },
+              headerTitleAlign: 'center',
+            }}
+          />
+          <Stack.Screen
+            name="Order"
+            component={Order}
+            options={{
+              tabBarStyle: {display: 'none'},
+              title: '주문 내역',
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              },
+              headerTitleAlign: 'center',
+            }}
+          />
+          <Stack.Screen
+            name="DetailScreen"
+            component={DetailScreen}
+            options={{
+              tabBarStyle: {display: 'none'},
+              title: '상품상세정보',
+              headerShown: true,
+              headerTitleStyle: {
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              },
+              headerTitleAlign: 'center',
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
