@@ -11,7 +11,7 @@ const Window_WIDTH = Dimensions.get('window').width;
 function DetailScreen({route}) {
   const {contentId, price, detailList, isChecked} = route.params;
   const [isVisibleMore, setIsVisibleMore] = useState(false);
-  const deletedDetailList = detailList.filter(item => item.detailID !== 1);
+  const deletedDetailList = detailList?.filter(item => item.detailID !== 1);
 
   return (
     <RootContainer>
