@@ -74,6 +74,7 @@ function OrderItem({orderId, orderTime, orderItems, existingItems}) {
                           contentId,
                           price,
                           isChecked,
+                          detailList,
                         });
                         addRecentProduct({
                           contentId,
