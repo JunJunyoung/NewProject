@@ -8,40 +8,10 @@ import HomeTab from './src/navigation/customTabNavi';
 import DetailScreen from './src/screens/DetailScreen';
 import {store} from './src/redux/store';
 import {Provider} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import useClothsRelatedActions from './src/hooks/useClothsRelatedActions';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  // const {addBasketProduct, addOrderProduct} = useClothsRelatedActions();
-
-  // useEffect(() => {
-  //   async function load() {
-  //     try {
-  //       const rawBasketProduct = await AsyncStorage.getItem('basketProduct');
-  //       const savedBasketProduct = JSON.parse(rawBasketProduct);
-  //       addBasketProduct(savedBasketProduct);
-  //     } catch (e) {
-  //       console.log('Failed to load basketProduct');
-  //     }
-  //   }
-  //   load();
-  // }, []);
-
-  // useEffect(() => {
-  //   async function load() {
-  //     try {
-  //       const rawOrderProduct = await AsyncStorage.getItem('orderProduct');
-  //       const savedOrderProduct = JSON.parse(rawOrderProduct);
-  //       addOrderProduct(savedOrderProduct);
-  //     } catch (e) {
-  //       console.log('Failed to load orderProduct');
-  //     }
-  //   }
-  //   load();
-  // }, []);
-
   return (
     <Provider store={store}>
       <NavigationContainer>

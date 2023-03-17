@@ -28,6 +28,7 @@ const PurchaseModal = props => {
     setPurchaseVisible,
     setOptionVisible,
   } = props;
+
   const {addBasketProduct, addOverwriteBasketProduct} =
     useClothsRelatedActions();
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
@@ -149,13 +150,6 @@ const PurchaseModal = props => {
       return null;
     }
   });
-
-  console.log('optionAddedSizeObj.quantity>>>', optionAddedSizeObj?.quantity);
-  console.log(
-    'selectedOrderProductSizeObj?.quantity>>>',
-    selectedOrderProductSizeObj?.quantity,
-  );
-  console.log('remainCountObj?.count>>>', remainCountObj?.count);
 
   const setValidator = () => {
     const test = basketProduct.find(

@@ -12,32 +12,13 @@ function DetailScreen({route}) {
   const {contentId, price, detailList, isChecked} = route.params;
   const [isVisibleMore, setIsVisibleMore] = useState(false);
   const deletedDetailList = detailList.filter(item => item.detailID !== 1);
-  const [size, setSize] = useState({width: 0, height: 0});
-
-  // useEffect(() => {
-  //   Image.getSize(uri, (w, h) => {
-  //     setSize({
-  //       width: Window_WIDTH,
-  //       height: h / (w / Window_WIDTH),
-  //     });
-  //   });
-  // }, []);
 
   return (
     <RootContainer>
       <ScrollView>
         <DetailPageHeader contentId={contentId} price={price} />
         <View>
-          <FastImage
-            style={{width: Window_WIDTH, height: 4080}}
-            justifyContent="center"
-            source={{
-              uri: detailList.find(item => item.detailID === 1).uri,
-              headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.contain}
-          />
+          {detailList.length > 0 && <ImageBlock item={detailList[0]} />}
         </View>
         {isVisibleMore === false ? (
           <View
@@ -58,23 +39,10 @@ function DetailScreen({route}) {
           </View>
         ) : (
           deletedDetailList.map((item, idx) => {
-            const {uri} = item;
             return (
               <ClothItemWrapper key={idx}>
                 <View>
-                  <FastImage
-                    style={{
-                      height: 2400,
-                      width: Window_WIDTH,
-                    }}
-                    justifyContent="center"
-                    source={{
-                      uri,
-                      headers: {Authorization: 'someAuthToken'},
-                      priority: FastImage.priority.normal,
-                    }}
-                    resizeMode={FastImage.resizeMode.stretch}
-                  />
+                  <ImageBlock item={item} />
                 </View>
               </ClothItemWrapper>
             );
@@ -136,5 +104,29 @@ const MoreText = styled.Text`
   color: #0066cc;
   padding-bottom: 7px;
 `;
+
+const ImageBlock = ({item}) => {
+  const [size, setSize] = useState({width: 0, height: 0});
+  useEffect(() => {
+    Image.getSize(item.uri, (width, height) => {
+      setSize({width: Window_WIDTH, height: (Window_WIDTH * height) / width});
+    });
+  }, []);
+  return (
+    <FastImage
+      style={{
+        height: size.height,
+        width: size.width,
+      }}
+      justifyContent="center"
+      source={{
+        uri: item.uri,
+        headers: {Authorization: 'someAuthToken'},
+        priority: FastImage.priority.normal,
+      }}
+      resizeMode={FastImage.resizeMode.cover}
+    />
+  );
+};
 
 export default DetailScreen;

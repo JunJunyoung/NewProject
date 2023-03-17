@@ -57,15 +57,12 @@ export const basketProductsSlice = createSlice({
         }
       });
     },
-    isSelectedChangedProduct: (state, action: PayloadAction<[]>) => {
+    setBasketProduct: (state, action: PayloadAction<[]>) => {
       state.basketProduct = action.payload;
     },
   },
 });
 
-export const {
-  addBasketProduct,
-  addOverwriteBasketProduct,
-  isSelectedChangedProduct,
-} = basketProductsSlice.actions;
+export const {addBasketProduct, addOverwriteBasketProduct, setBasketProduct} =
+  basketProductsSlice.actions;
 export default basketProductsSlice.reducer;

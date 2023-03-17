@@ -6,7 +6,7 @@ import {addRecentProduct} from '../redux/slice/RecentProducts';
 import {
   addBasketProduct,
   addOverwriteBasketProduct,
-  isSelectedChangedProduct,
+  setBasketProduct,
 } from '../redux/slice/BasketProducts';
 import {addOrderProduct} from '../redux/slice/OrderProducts';
 
@@ -21,7 +21,7 @@ export default function useClothsRelatedActions() {
           addRecentProduct,
           addBasketProduct,
           addOverwriteBasketProduct,
-          isSelectedChangedProduct,
+          setBasketProduct,
           addOrderProduct,
         },
         dispatch,

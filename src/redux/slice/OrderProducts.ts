@@ -27,7 +27,7 @@ export interface orderProduct {
 
 const initialState: orderProduct[] = [];
 
-export const basketProductsSlice = createSlice({
+export const orderProductsSlice = createSlice({
   name: 'orderProducts',
   initialState: {orderProduct: initialState},
   reducers: {
@@ -37,5 +37,5 @@ export const basketProductsSlice = createSlice({
   },
 });
 
-export const {addOrderProduct} = basketProductsSlice.actions;
-export default basketProductsSlice.reducer;
+export const {addOrderProduct} = orderProductsSlice.actions;
+export default orderProductsSlice.reducer;

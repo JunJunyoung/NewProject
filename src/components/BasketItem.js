@@ -31,8 +31,7 @@ function BasketItem({purchaseId, orderItems, existingItems}) {
     detailList,
   } = existingItems;
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
-  const {addRecentProduct, isSelectedChangedProduct} =
-    useClothsRelatedActions();
+  const {addRecentProduct, setBasketProduct} = useClothsRelatedActions();
   const navigation = useNavigation();
 
   return (
@@ -103,7 +102,7 @@ function BasketItem({purchaseId, orderItems, existingItems}) {
                       fillColor="#f66"
                       isChecked={isSelected}
                       onPress={() => {
-                        isSelectedChangedProduct(isSelectedTrueOrderItem);
+                        setBasketProduct(isSelectedTrueOrderItem);
                       }}
                       disableText={true}
                       disableBuiltInState
@@ -123,7 +122,7 @@ function BasketItem({purchaseId, orderItems, existingItems}) {
                       fillColor="#f66"
                       isChecked={isSelected}
                       onPress={() => {
-                        isSelectedChangedProduct(isSelectedFalseOrderItem);
+                        setBasketProduct(isSelectedFalseOrderItem);
                       }}
                       disableText={true}
                       disableBuiltInState
@@ -140,6 +139,7 @@ function BasketItem({purchaseId, orderItems, existingItems}) {
                           contentId,
                           price,
                           isChecked,
+                          detailList,
                         });
                         addRecentProduct({
                           contentId,

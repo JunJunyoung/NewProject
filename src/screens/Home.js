@@ -1,16 +1,50 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions, View} from 'react-native';
 import styled from 'styled-components/native';
 import ClothItem from '../components/ClothItem';
 import {useSelector} from 'react-redux';
 import ScrollViewCarousel from '../components/ScrollViewCarousel';
 import eventsImage from '../static/events.json';
-import {color} from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import useClothsRelatedActions from '../hooks/useClothsRelatedActions';
 
 const HALF_WINDOW_WIDTH = Dimensions.get('window').width / 2;
 
 const Home = () => {
   const clothList = useSelector(state => state.clothList.clothList);
+  const {setBasketProduct, addOrderProduct} = useClothsRelatedActions();
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const rawBasketProduct = await AsyncStorage.getItem('basketProduct');
+        if (!rawBasketProduct) {
+          throw new Error('No saved basketProduct');
+        }
+        const savedBasketProduct = JSON.parse(rawBasketProduct);
+        return setBasketProduct(savedBasketProduct);
+      } catch (e) {
+        console.log('Failed to load basketProduct');
+      }
+    }
+    load();
+  }, []);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const rawOrderProduct = await AsyncStorage.getItem('orderProduct');
+        if (!rawOrderProduct) {
+          throw new Error('No saved orderProduct');
+        }
+        const savedOrderProduct = JSON.parse(rawOrderProduct);
+        return addOrderProduct(savedOrderProduct);
+      } catch (e) {
+        console.log('Failed to load orderProduct');
+      }
+    }
+    load();
+  }, []);
 
   return (
     <Container showsVerticalScrollIndicator={false} stickyHeaderIndices={[2]}>

@@ -1,10 +1,11 @@
-import React from 'react';
-import {View, Text, Platform, Dimensions} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, Platform, Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import ClothItem from '../components/ClothItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TRISECTION_WINDOW_WIDTH = Dimensions.get('window').width / 3;
 
@@ -25,13 +26,42 @@ const Profile = () => {
     item => item.isChecked === true,
   ).length;
 
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.log('Failed to reset');
+    }
+  };
+
+  const checkForReset = () => {
+    Alert.alert(
+      '관리자',
+      'Do you want to reset all the storage?',
+      [
+        {text: '취소', onPress: () => {}, style: 'cancel'},
+        {
+          text: '삭제',
+          onPress: () => {
+            clearAll();
+          },
+          style: 'destructive',
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => {},
+      },
+    );
+  };
+
   return (
     <Container>
       <ProfileView>
         <ProfileTouchable activeOpacity={0.8}>
           <Icon size={60} name="account-circle" color="#A0A0A0" />
         </ProfileTouchable>
-        <ProfileTouchable activeOpacity={0.8}>
+        <ProfileTouchable onPress={checkForReset} activeOpacity={0.8}>
           <Icon size={45} name="cog" color="#A0A0A0" />
         </ProfileTouchable>
       </ProfileView>
@@ -49,7 +79,7 @@ const Profile = () => {
               주문 내역
             </Text>
             <Text style={{fontSize: 23, fontWeight: 'bold', color: 'blue'}}>
-              {orderProduct.length}
+              {orderProduct?.length}
             </Text>
             <Icon size={30} name="chevron-right" color="#A0A0A0" />
           </View>
@@ -201,4 +231,5 @@ const ClothView = styled.View`
 const ClothItemWrapper = styled.View`
   padding-vertical: 4px;
 `;
+
 export default Profile;

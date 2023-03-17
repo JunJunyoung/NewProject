@@ -15,11 +15,11 @@ const Basket = () => {
   const clothList = useSelector(state => state.clothList.clothList);
   const basketProduct = useSelector(state => state.basketProduct.basketProduct);
   const [checkboxState, setCheckboxState] = useState(false);
-  const {isSelectedChangedProduct, addOrderProduct} = useClothsRelatedActions();
+  const {setBasketProduct, addOrderProduct} = useClothsRelatedActions();
   const allIsSelectedTrueProduct = useMemo(
     () =>
-      basketProduct.map(item => {
-        const newOne = item.orderItems.map(c =>
+      basketProduct?.map(item => {
+        const newOne = item?.orderItems?.map(c =>
           c.isSelected === false ? {...c, isSelected: true} : c,
         );
         return {...item, orderItems: newOne};
@@ -28,8 +28,8 @@ const Basket = () => {
   );
   const allIsSelectedFalseProduct = useMemo(
     () =>
-      basketProduct.map(item => {
-        const newOne = item.orderItems.map(c =>
+      basketProduct?.map(item => {
+        const newOne = item?.orderItems?.map(c =>
           c.isSelected === true ? {...c, isSelected: false} : c,
         );
         return {...item, orderItems: newOne};
@@ -38,7 +38,7 @@ const Basket = () => {
   );
   const SelectedItemsDeleteArr = useMemo(
     () =>
-      basketProduct.filter(item => {
+      basketProduct?.filter(item => {
         if (item.orderItems.every(c => c.isSelected === false) === true) {
           return {item};
         }
@@ -47,7 +47,7 @@ const Basket = () => {
   );
   const SelectedItemsArr = useMemo(
     () =>
-      basketProduct.filter(item => {
+      basketProduct?.filter(item => {
         if (item.orderItems.every(c => c.isSelected === true) === true) {
           return {item};
         }
@@ -56,7 +56,7 @@ const Basket = () => {
   );
   const idNameChangeSelectedItemsArr = useMemo(
     () =>
-      SelectedItemsArr.map(({purchaseId: orderId, ...item}) => ({
+      SelectedItemsArr?.map(({purchaseId: orderId, ...item}) => ({
         orderId,
         ...item,
       })),
@@ -92,14 +92,28 @@ const Basket = () => {
       try {
         await AsyncStorage.setItem(
           'orderProduct',
-          JSON.stringify(orderProduct),
+          JSON.stringify(orderedProduct),
         );
       } catch (e) {
         console.log('Fail to save orderProduct');
       }
     }
     save();
-  }, [orderProduct]);
+  }, [orderedProduct]);
+
+  useEffect(() => {
+    async function save() {
+      try {
+        await AsyncStorage.setItem(
+          'basketProduct',
+          JSON.stringify(basketProduct),
+        );
+      } catch (e) {
+        console.log('Fail to save basketProduct');
+      }
+    }
+    save();
+  }, [basketProduct]);
 
   const deleteIsSelected = () => {
     Alert.alert(
@@ -110,7 +124,7 @@ const Basket = () => {
         {
           text: '삭제',
           onPress: () => {
-            isSelectedChangedProduct(SelectedItemsDeleteArr);
+            setBasketProduct(SelectedItemsDeleteArr);
           },
           style: 'destructive',
         },
@@ -195,13 +209,6 @@ const Basket = () => {
     item.label === SelectedOrderItemObj?.orderSize ? item.count : null,
   );
 
-  console.log(
-    'sameOrderProductAndClothListObj>>>',
-    sameOrderProductAndClothListObj,
-  );
-  console.log('SelectedOrderItemObj>>>', SelectedOrderItemObj);
-  console.log('sameClothListItemsCountObj>>>', sameClothListItemsCountObj);
-
   const purchaseCompleted = () => {
     if (
       sameOrderProductAndClothListObj?.quantity +
@@ -219,7 +226,7 @@ const Basket = () => {
         },
       );
       addOrderProduct(orderProduct);
-      isSelectedChangedProduct(SelectedItemsDeleteArr);
+      setBasketProduct(SelectedItemsDeleteArr);
     }
   };
 
@@ -263,7 +270,7 @@ const Basket = () => {
                 fillColor="#f66"
                 isChecked={checkboxState}
                 onPress={() => {
-                  isSelectedChangedProduct(allIsSelectedTrueProduct);
+                  setBasketProduct(allIsSelectedTrueProduct);
                   setCheckboxState(!checkboxState);
                 }}
                 disableText={true}
@@ -283,7 +290,7 @@ const Basket = () => {
                 fillColor="#f66"
                 isChecked={checkboxState}
                 onPress={() => {
-                  isSelectedChangedProduct(allIsSelectedFalseProduct);
+                  setBasketProduct(allIsSelectedFalseProduct);
                   setCheckboxState(!checkboxState);
                 }}
                 disableText={true}
